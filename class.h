@@ -93,7 +93,7 @@ public:
     int best_seller_sales;
     int* statistics;
     CarModel** pointers;
-    CarModel* zero_list;
+    //CarModel* zero_list;
     CarType(int type_id,int num_of_models);
     ~CarType();
     bool operator>(CarType& model2);
