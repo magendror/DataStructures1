@@ -1,7 +1,13 @@
+#ifndef CLASS
+#define CLASS
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "typetree.h"
+#include "ratetree.h"
+#include "salestree.h"
+#include "newtree.h"
 class CarModel
 {
 public:
@@ -51,7 +57,7 @@ bool CarModel::operator>(CarModel& model2){
             }
         }
     }
-    //check by rate//
+    //check by sells//
     else if(sort_by_rate==false){
         if(num_of_sales>model2.num_of_sales){
             return true;
@@ -115,16 +121,16 @@ bool CarType::operator>(CarType& type2){
 class Dealership
 {
 public:
-    CarType* type_tree;
-    CarType* new_tree;
-    CarModel* rate_tree;
-    CarType* sales_tree;
-    CarModel* WorstRate;
-    CarType* WorstRateNew;
-    CarModel* WorstSecondRate;
-    CarType* WorstSecondRateNew;
+    TypeNode* type_tree;
+    Node* new_tree;
+    ModelNode* rate_tree;
+    SalesNode* sales_tree;
+    ModelNode* WorstRate;
+    ModelNode* WorstRateNew;
+    ModelNode* WorstSecondRate;
+    ModelNode* WorstSecondRateNew;
     int NumOfModels;
-    CarModel* MaxSales;
+    SalesNode* MaxSales;
     Dealership();
     ~Dealership();
 };
@@ -138,3 +144,4 @@ Dealership::Dealership():type_tree(NULL),new_tree(NULL),rate_tree(NULL),sales_tr
 Dealership::~Dealership()
 {
 }
+#endif
