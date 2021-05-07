@@ -74,6 +74,39 @@ int getBalanceFactor(ModelNode*N) {
        height(N->right);
 }
 
+//Find the correct postion by rate and id
+ModelNode *findNodeByRate(ModelNode *node, int rate, int modelid, int typeid ){
+  if(node==NULL){
+    return node;
+  }
+  if (node->key.rate> rate){
+    return (findNodeByRate(node->left, rate,modelid, typeid));
+  }
+  else if (node->key.rate< rate)
+  {
+    return (findNodeByRate(node->right, rate,modelid, typeid));
+  }
+  else{
+    if(node->key.type_id>typeid){
+      return (findNodeByRate(node->left, rate,modelid, typeid));
+    }
+    else if (node->key.type_id<typeid){
+      return (findNodeByRate(node->right, rate,modelid, typeid));
+    }
+    else{
+      if(node->key.model_id>modelid){
+        return (findNodeByRate(node->left, rate,modelid, typeid));
+      }
+      else if(node->key.model_id<modelid){
+        return (findNodeByRate(node->right, rate,modelid, typeid));
+      }
+      else
+        return node;
+    }
+  }
+}
+
+
 // Insert a node
 ModelNode*insertNode(ModelNode*node, CarModel key) {
   // Find the correct postion and insert the node

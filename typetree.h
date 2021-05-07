@@ -73,6 +73,22 @@ int getBalanceFactor(TypeNode *N) {
   return height(N->left) -
        height(N->right);
 }
+//Find the correct postion by typeID
+TypeNode *findTypeNode(TypeNode *node, int typeid){
+
+  if(node==NULL){
+    return node;
+  }
+  if (node->key.type_id> typeid){
+    return (findTypeNode(node->left, typeid));
+  }
+  else if (typeid> node->key.type_id)
+  {
+    return (findTypeNode(node->right, typeid));
+  }
+  else
+    return node;
+}
 
 // Insert a TypeNode
 TypeNode *insertTypeNode(TypeNode *node, CarType key) {

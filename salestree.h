@@ -74,6 +74,21 @@ int getBalanceFactor(SalesNode*N) {
        height(N->right);
 }
 
+SalesNode *findNode(SalesNode *node, CarModel key){
+  if(node==NULL){
+    return node;
+  }
+  if (node->key> key){
+    return (findNode(node->left, key));
+  }
+  else if (key> node->key)
+  {
+    return (findNode(node->right, key));
+  }
+  else
+    return node;
+}
+
 // Insert a node
 SalesNode*insertNode(SalesNode*node, CarModel key) {
   // Find the correct postion and insert the node
@@ -111,22 +126,54 @@ SalesNode*insertNode(SalesNode*node, CarModel key) {
 }
 
 // SalesNodewith minimum value
-SalesNode*nodeWithMimumValue(SalesNode*node) {
+SalesNode*SalesnodeWithMimumValue(SalesNode*node) {
   SalesNode*current = node;
   while (current->left != NULL)
     current = current->left;
   return current;
 }
+////Find the correct postion by sales and id
+ModelNode *findNodeBySales(ModelNode *node, int sales, int modelid, int typeid){
+  if(node==NULL){
+    return node;
+  }
+  if (node->key.num_of_sales> sales){
+    return (findNodeBySales(node->left, sales,modelid, typeid));
+  }
+  else if (node->key.num_of_sales< sales)
+  {
+    return (findNodeBySales(node->right, sales,modelid, typeid));
+  }
+  else{
+    if(node->key.type_id>typeid){
+      return (findNodeBySales(node->left, sales,modelid, typeid));
+    }
+    else if (node->key.type_id<typeid){
+      return (findNodeBySales(node->right, sales,modelid, typeid));
+    }
+    else{
+      if(node->key.model_id>modelid){
+        return (findNodeBySales(node->left, sales,modelid, typeid));
+      }
+      else if(node->key.model_id<modelid){
+        return (findNodeBySales(node->right, sales,modelid, typeid));
+      }
+      else
+        return node;
+    }
+  }
+}
+
 
 // Delete a node
-SalesNode*deleteNode(SalesNode*root, CarModel key) {
+SalesNode*deleteSalesNode(SalesNode*root, CarModel key) {
   // Find the SalesNodeand delete it
   if (root == NULL)
     return root;
   if (root->key > key)
-    root->left = deleteNode(root->left, key);
+    root->left = deleteSalesNode(root->left, key);
   else if (key > root->key)
-    root->right = deleteNode(root->right, key);
+    root->right = deleteSalesNode(root->right, key);
   else {
     if ((root->left == NULL) ||
       (root->right == NULL)) {
@@ -140,7 +187,7 @@ SalesNode*deleteNode(SalesNode*root, CarModel key) {
     } else {
       SalesNode*temp = nodeWithMimumValue(root->right);
       root->key = temp->key;
-      root->right = deleteNode(root->right,
+      root->right = deleteSalesNode(root->right,
                    temp->key);
     }
   }
