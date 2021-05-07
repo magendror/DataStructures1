@@ -88,6 +88,40 @@ StatusType makeComplaint(void *DS, int typeID, int modelID, int t){
 
 }
 
+void inorder(ModelNode*ratetree,Node *newtree,int *types, int *models){
+    if(ratetree==NULL){
+        return;
+    }
+    inorder(ratetree->left,newtree,types,models);
+    if(ratetree->key.rate==0){
+
+    }
+
+}
+
+StatusType GetWorstModels(void *DS, int numOfModels, int *types, int *models){
+    if(DS==NULL || numOfModels<=0){
+        return INVALID_INPUT;
+    }
+    DS=(Dealership*)DS;
+    if(numOfModels>DS.NumOfModels){
+        return FAILURE;
+    }
+    int counter=0;
+    ModelNode *rate_node=NodeWithMimumValue(DS.rate_tree);
+    while(counter<numOfModels){
+        
+
+
+
+    }
+
+
+}
+
+
+
+
 
 
 
