@@ -3,14 +3,15 @@
 #include <iostream>
 #include "class.h"
 
+namespace mtm{
 
 class ModelNode{
   public:
-  CarModel key;
+  CarModel* key;
   ModelNode*left;
   ModelNode*right;
   int height;
-  ModelNode(CarModel key);
+  ModelNode(CarModel* key);
 };
 
 // int max(int a, int b);

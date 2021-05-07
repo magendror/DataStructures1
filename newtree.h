@@ -2,22 +2,24 @@
 #define NEW_TREE
 #include <iostream>
 #include "class.h"
-
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 class Node {
   public:
-  CarType key;
+  CarType* key;
   Node *left;
   Node *right;
   int height;
-  CarModel *newlist;
-  Node(CarType key);
+  CarModel* newlist;
+  Node(CarType* key);
 };
 
 // int max(int a, int b);
 
 // Calculate height
-int height(Node *N) {
+int height(Node* N) {
   if (N == NULL)
     return 0;
   return N->height;
@@ -28,7 +30,7 @@ int max(int a, int b) {
 }
 
 // New Node creation
-Node *newNode(CarType key) {
+Node* newNode(CarType* key) {
   Node *node = new Node(key);
   node->key = key;
   node->left = NULL;

@@ -1,5 +1,6 @@
-#ifndef CLASS
-#define CLASS
+#ifndef CLASS_H
+#define CLASS_H
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,8 +9,8 @@
 #include "ratetree.h"
 #include "salestree.h"
 #include "newtree.h"
-class CarModel
-{
+
+class CarModel{
 public:
     int model_id;
     bool sort_by_rate;
@@ -24,12 +25,10 @@ public:
 CarModel::CarModel(int model_id,bool sort_by_rate,int type_id,int num_of_sales,int rate):
                                     type_id(type_id),model_id(model_id),sort_by_rate(sort_by_rate),
                                     num_of_sales(num_of_sales),rate(rate)
-{
-}
+{}
 
-CarModel::~CarModel()
-{
-}
+CarModel::~CarModel(){}
+
 bool CarModel::operator>(CarModel& model2){
     assert(sort_by_rate==model2.sort_by_rate);
     //check by rate//
@@ -58,7 +57,7 @@ bool CarModel::operator>(CarModel& model2){
         }
     }
     //check by sells//
-    else if(sort_by_rate==false){
+    else{
         if(num_of_sales>model2.num_of_sales){
             return true;
         }
@@ -93,7 +92,6 @@ public:
     int best_seller_sales;
     int* statistics;
     CarModel** pointers;
-    //CarModel* zero_list;
     CarType(int type_id,int num_of_models);
     ~CarType();
     bool operator>(CarType& model2);

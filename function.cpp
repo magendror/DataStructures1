@@ -8,19 +8,10 @@
 #include "salestree.h"
 #include "newtree.h"
 #include "library.h"
+#include "class.h"
 
 void *init(){
     Dealership* ds=new Dealership();
-    ds->type_tree=NULL;
-    ds->sales_tree=NULL;
-    ds->rate_tree=NULL;
-    ds->new_tree=NULL;
-    ds->WorstRate=NULL;
-    ds->WorstRateNew=NULL;
-    ds->WorstSecondRate=NULL;
-    ds->WorstSecondRateNew=NULL;
-    ds->NumOfModels=0;
-    ds->MaxSales=NULL;
     return ds;
 
 }
@@ -85,9 +76,16 @@ StatusType makeComplaint(void *DS, int typeID, int modelID, int t){
     DS.ratetree=insertNode(DS.ratetree,modelnode->key);
     updatingmax(DS);
     return SUCCESS;
-
 }
 
 
+StatusType AddCarType(void *DS, int typeID, int numOfModels){
+    DS=(Dealership*)DS;
+    if(DS==NULL||typeID<=0||numOfModels<0){
+        return INVALID_INPUT;
+    }
+    CarType* new_type = new CarType(typeID,numOfModels);
+    new_type
+}
 
 

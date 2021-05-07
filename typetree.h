@@ -1,8 +1,7 @@
-#ifndef TYPE_TREE
-#define TYPE_TREE
+#ifndef TYPE_TREE_H
+#define TYPE_TREE_H
 #include <iostream>
 #include "class.h"
-
 
 class TypeNode {
   public:
@@ -10,7 +9,7 @@ class TypeNode {
   TypeNode *left;
   TypeNode *right;
   int height;
-  TypeNode(CarType key);
+  TypeNode(Cart key);
 };
 
 // int max(int a, int b);
