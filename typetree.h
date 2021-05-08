@@ -1,21 +1,21 @@
 #ifndef TYPE_TREE_H
 #define TYPE_TREE_H
 #include <iostream>
-#include "class.h"
+#include "cars.h"
 
 class TypeNode {
   public:
-  CarType key;
+  CarType* key;
   TypeNode *left;
   TypeNode *right;
   int height;
-  TypeNode(Cart key);
+  TypeNode(CarType* key);
 };
 
 // int max(int a, int b);
 
 // Calculate height
-int height(TypeNode *N) {
+int height(TypeNode* N) {
   if (N == NULL)
     return 0;
   return N->height;
@@ -26,7 +26,7 @@ int max(int a, int b) {
 }
 
 // New TypeNode creation
-TypeNode *newTypeNode(CarType key) {
+TypeNode *newTypeNode(CarType* key) {
   TypeNode *node = new TypeNode(key);
   node->key = key;
   node->left = NULL;
@@ -73,30 +73,30 @@ int getBalanceFactor(TypeNode *N) {
        height(N->right);
 }
 //Find the correct postion by typeID
-TypeNode *findTypeNode(TypeNode *node, int typeid){
+TypeNode *findTypeNode(TypeNode *node, int type_id){
 
   if(node==NULL){
     return node;
   }
-  if (node->key.type_id> typeid){
-    return (findTypeNode(node->left, typeid));
+  if (node->key->type_id> type_id){
+    return (findTypeNode(node->left, type_id));
   }
-  else if (typeid> node->key.type_id)
+  else if (type_id > node->key->type_id)
   {
-    return (findTypeNode(node->right, typeid));
+    return (findTypeNode(node->right, type_id));
   }
   else
     return node;
 }
 
 // Insert a TypeNode
-TypeNode *insertTypeNode(TypeNode *node, CarType key) {
+TypeNode *insertTypeNode(TypeNode *node, CarType* key) {
   // Find the correct postion and insert the TypeNode
   if (node == NULL)
     return (newTypeNode(key));
-  if (node->key> key)
+  if (*(node->key) > *(key))
     node->left = insertTypeNode(node->left, key);
-  else if (key > node->key)
+  else if (*(key) > *(node->key))
     node->right = insertTypeNode(node->right, key);
   else
     return node;
@@ -107,17 +107,17 @@ TypeNode *insertTypeNode(TypeNode *node, CarType key) {
                height(node->right));
   int balanceFactor = getBalanceFactor(node);
   if (balanceFactor > 1) {
-    if (node->left->key> key) {
+    if (*(node->left->key) > *(key)) {
       return rightRotate(node);
-    } else if (key > node->left->key) {
+    } else if (*(key) > *(node->left->key)) {
       node->left = leftRotate(node->left);
       return rightRotate(node);
     }
   }
   if (balanceFactor < -1) {
-    if (key > node->right->key) {
+    if (*(key) > *(node->right->key)) {
       return leftRotate(node);
-    } else if (node->right->key > key) {
+    } else if (*(node->right->key) > *(key)) {
       node->right = rightRotate(node->right);
       return leftRotate(node);
     }
@@ -134,13 +134,13 @@ TypeNode *TypeNodeWithMimumValue(TypeNode *node) {
 }
 
 // Delete a TypeNode
-TypeNode *deleteTypeNode(TypeNode *root, CarType key) {
+TypeNode *deleteTypeNode(TypeNode *root, CarType* key) {
   // Find the TypeNode and delete it
   if (root == NULL)
     return root;
-  if (root->key > key)
+  if (*(root->key) > *(key))
     root->left = deleteTypeNode(root->left, key);
-  else if (key > root->key)
+  else if (*(key) > *(root->key))
     root->right = deleteTypeNode(root->right, key);
   else {
     if ((root->left == NULL) ||
@@ -155,8 +155,7 @@ TypeNode *deleteTypeNode(TypeNode *root, CarType key) {
     } else {
       TypeNode *temp = TypeNodeWithMimumValue(root->right);
       root->key = temp->key;
-      root->right = deleteTypeNode(root->right,
-                   temp->key);
+      root->right = deleteTypeNode(root->right,temp->key);
     }
   }
 

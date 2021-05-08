@@ -1,7 +1,7 @@
 #ifndef SALES_TREE
 #define SALES_TREE
 #include <iostream>
-#include "class.h"
+#include "cars.h"
 
 
 class SalesNode{
@@ -74,30 +74,30 @@ int getBalanceFactor(SalesNode*N) {
        height(N->right);
 }
 
-SalesNode *findNode(SalesNode *node, CarModel key){
+SalesNode *findSalesNode(SalesNode *node, CarModel key){
   if(node==NULL){
     return node;
   }
   if (node->key> key){
-    return (findNode(node->left, key));
+    return (findSalesNode(node->left, key));
   }
   else if (key> node->key)
   {
-    return (findNode(node->right, key));
+    return (findSalesNode(node->right, key));
   }
   else
     return node;
 }
 
 // Insert a node
-SalesNode*insertNode(SalesNode*node, CarModel key) {
+SalesNode*insertSalesNode(SalesNode*node, CarModel key) {
   // Find the correct postion and insert the node
   if (node== NULL)
     return (newNode(key));
   if (node->key> key)
-    node->left = insertNode(node->left, key);
+    node->left = insertSalesNode(node->left, key);
   else if (key > node->key)
-    node->right = insertNode(node->right, key);
+    node->right = insertSalesNode(node->right, key);
   else
     return node;
 
@@ -126,37 +126,37 @@ SalesNode*insertNode(SalesNode*node, CarModel key) {
 }
 
 // SalesNodewith minimum value
-SalesNode*SalesnodeWithMimumValue(SalesNode*node) {
+SalesNode* SalesNodeWithMimumValue(SalesNode*node) {
   SalesNode*current = node;
   while (current->left != NULL)
     current = current->left;
   return current;
 }
 ////Find the correct postion by sales and id
-ModelNode *findNodeBySales(ModelNode *node, int sales, int modelid, int typeid){
+ModelNode *findSalesNodeBySales(ModelNode *node, int sales, int modelid, int type_id){
   if(node==NULL){
     return node;
   }
-  if (node->key.num_of_sales> sales){
-    return (findNodeBySales(node->left, sales,modelid, typeid));
+  if (node->key->num_of_sales > sales){
+    return (findSalesNodeBySales(node->left, sales,modelid, type_id));
   }
-  else if (node->key.num_of_sales< sales)
+  else if (node->key->num_of_sales < sales)
   {
-    return (findNodeBySales(node->right, sales,modelid, typeid));
+    return (findSalesNodeBySales(node->right, sales,modelid, type_id));
   }
   else{
-    if(node->key.type_id>typeid){
-      return (findNodeBySales(node->left, sales,modelid, typeid));
+    if(node->key->type_id > type_id){
+      return (findSalesNodeBySales(node->left, sales,modelid, type_id));
     }
-    else if (node->key.type_id<typeid){
-      return (findNodeBySales(node->right, sales,modelid, typeid));
+    else if (node->key->type_id < type_id){
+      return (findSalesNodeBySales(node->right, sales,modelid, type_id));
     }
     else{
-      if(node->key.model_id>modelid){
-        return (findNodeBySales(node->left, sales,modelid, typeid));
+      if(node->key->model_id > modelid){
+        return (findSalesNodeBySales(node->left, sales,modelid, type_id));
       }
-      else if(node->key.model_id<modelid){
-        return (findNodeBySales(node->right, sales,modelid, typeid));
+      else if(node->key->model_id < modelid){
+        return (findSalesNodeBySales(node->right, sales,modelid, type_id));
       }
       else
         return node;
@@ -185,7 +185,7 @@ SalesNode*deleteSalesNode(SalesNode*root, CarModel key) {
         *root = *temp;
       free(temp);
     } else {
-      SalesNode*temp = nodeWithMimumValue(root->right);
+      SalesNode* temp = SalesNodeWithMimumValue(root->right);
       root->key = temp->key;
       root->right = deleteSalesNode(root->right,
                    temp->key);

@@ -8,7 +8,8 @@
 #include "salestree.h"
 #include "newtree.h"
 #include "library.h"
-#include "class.h"
+#include "cars.h"
+#include "dealership.h"
 
 void *init(){
     Dealership* ds=new Dealership();
@@ -17,11 +18,11 @@ void *init(){
 }
 
 void updatingmax(Dealership* ds){
-    ds.WorstRate=NodeWithMimumValue(ds->rate_tree);
+    ds->WorstRate=NodeWithMimumValue(ds->rate_tree);
     // ModelNode* WorstRateNew;
     // ModelNode* WorstSecondRate;
     // ModelNode* WorstSecondRateNew;
-    ds.MaxSales=SalesnodeWithMimumValue(ds->sales_tree)->key.num_of_sales;
+    ds->MaxSales=SalesnodeWithMimumValue(ds->sales_tree)->key.num_of_sales;
 
 }
 
@@ -34,11 +35,11 @@ StatusType RemoveCarType(void *DS, int typeID){
     if(typenode==NULL){
         return FAILURE;
     }
-    int numofmodels=typenode->key.num_of_models;
+    int numofmodels=typenode->key->num_of_models;
     int rate,sales;
     for(int i=0;i< numofmodels;i++){
-        rate=typenode->key.statistics[0][i];
-        sales=typenode->key.statistics[1][i];
+        rate=typenode->key->statistics[0][i];
+        sales=typenode->key->statistics[1][i];
         ModelNode *modelnode=findNodeByRate(DS.rate_tree,rate,i,typeID);
         DS.rate_tree=deleteNode(DS.rate_tree,modelnode->key);
         modelnode=findNodeBySales(DS.sales_tree,sales,i,typeID);
@@ -100,26 +101,20 @@ StatusType GetWorstModels(void *DS, int numOfModels, int *types, int *models){
     int counter=0;
     ModelNode *rate_node=NodeWithMimumValue(DS.rate_tree);
     while(counter<numOfModels){
-        
-
-
-
     }
-
-
 }
 
-
-
-
-
 StatusType AddCarType(void *DS, int typeID, int numOfModels){
-    DS=(Dealership*)DS;
+    Dealership* DS_convert = (Dealership*)DS;
     if(DS==NULL||typeID<=0||numOfModels<0){
         return INVALID_INPUT;
     }
+    CarType* type = new CarType(typeID,numOfModels);
     CarType* new_type = new CarType(typeID,numOfModels);
-    new_type
+    insertTypeNode(DS_convert->type_tree,type);
+    insertNode(DS_convert->new_tree,new_type);
+    ();
+    return SUCCESS;
 }
 
 

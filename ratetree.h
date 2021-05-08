@@ -1,9 +1,8 @@
 #ifndef RATE_TREE
 #define RATE_TREE
 #include <iostream>
-#include "class.h"
+#include "cars.h"
 
-namespace mtm{
 
 class ModelNode{
   public:
@@ -28,7 +27,7 @@ int max(int a, int b) {
 }
 
 // New ModelNodecreation
-ModelNode*newNode(CarModel key) {
+ModelNode* newNode(CarModel* key) {
   ModelNode* node= new ModelNode(key);
   node->key = key;
   node->left = NULL;
@@ -38,7 +37,7 @@ ModelNode*newNode(CarModel key) {
 }
 
 // Rotate right
-ModelNode*rightRotate(ModelNode*y) {
+ModelNode* rightRotate(ModelNode* y) {
   ModelNode*x = y->left;
   ModelNode*T2 = x->right;
   x->right = y;
@@ -53,7 +52,7 @@ ModelNode*rightRotate(ModelNode*y) {
 }
 
 // Rotate left
-ModelNode*leftRotate(ModelNode*x) {
+ModelNode* leftRotate(ModelNode* x) {
   ModelNode*y = x->right;
   ModelNode*T2 = y->left;
   y->left = x;
@@ -68,7 +67,7 @@ ModelNode*leftRotate(ModelNode*x) {
 }
 
 // Get the balance factor of each node
-int getBalanceFactor(ModelNode*N) {
+int getBalanceFactor(ModelNode* N) {
   if (N == NULL)
     return 0;
   return height(N->left) -
@@ -76,30 +75,30 @@ int getBalanceFactor(ModelNode*N) {
 }
 
 //Find the correct postion by rate and id
-ModelNode *findNodeByRate(ModelNode *node, int rate, int modelid, int typeid ){
+ModelNode* findNodeByRate(ModelNode* node, int rate, int modelid, int type_id){
   if(node==NULL){
     return node;
   }
-  if (node->key.rate> rate){
-    return (findNodeByRate(node->left, rate,modelid, typeid));
+  if (node->key->rate > rate){
+    return (findNodeByRate(node->left, rate,modelid, type_id));
   }
-  else if (node->key.rate< rate)
+  else if (node->key->rate < rate)
   {
-    return (findNodeByRate(node->right, rate,modelid, typeid));
+    return (findNodeByRate(node->right, rate,modelid, type_id));
   }
   else{
-    if(node->key.type_id>typeid){
-      return (findNodeByRate(node->left, rate,modelid, typeid));
+    if(node->key->type_id > type_id){
+      return (findNodeByRate(node->left, rate,modelid, type_id));
     }
-    else if (node->key.type_id<typeid){
-      return (findNodeByRate(node->right, rate,modelid, typeid));
+    else if (node->key->type_id < type_id){
+      return (findNodeByRate(node->right, rate,modelid, type_id));
     }
     else{
-      if(node->key.model_id>modelid){
-        return (findNodeByRate(node->left, rate,modelid, typeid));
+      if(node->key->model_id > modelid){
+        return (findNodeByRate(node->left, rate,modelid, type_id));
       }
-      else if(node->key.model_id<modelid){
-        return (findNodeByRate(node->right, rate,modelid, typeid));
+      else if(node->key->model_id < modelid){
+        return (findNodeByRate(node->right, rate,modelid, type_id));
       }
       else
         return node;
@@ -109,7 +108,7 @@ ModelNode *findNodeByRate(ModelNode *node, int rate, int modelid, int typeid ){
 
 
 // Insert a node
-ModelNode*insertNode(ModelNode*node, CarModel key) {
+ModelNode* insertNode(ModelNode* node, CarModel* key) {
   // Find the correct postion and insert the node
   if (node== NULL)
     return (newNode(key));
@@ -145,7 +144,7 @@ ModelNode*insertNode(ModelNode*node, CarModel key) {
 }
 
 // ModelNodewith minimum value
-ModelNode*nodeWithMimumValue(ModelNode*node) {
+ModelNode* RateNodeWithMimumValue(ModelNode* node) {
   ModelNode*current = node;
   while (current->left != NULL)
     current = current->left;
@@ -153,14 +152,14 @@ ModelNode*nodeWithMimumValue(ModelNode*node) {
 }
 
 // Delete a node
-ModelNode*deleteNode(ModelNode*root, CarModel key) {
+ModelNode* deleteRateNode(ModelNode* root, CarModel* key) {
   // Find the ModelNodeand delete it
   if (root == NULL)
     return root;
   if (root->key > key)
-    root->left = deleteNode(root->left, key);
+    root->left = deleteRateNode(root->left, key);
   else if (key > root->key)
-    root->right = deleteNode(root->right, key);
+    root->right = deleteRateNode(root->right, key);
   else {
     if ((root->left == NULL) ||
       (root->right == NULL)) {
@@ -172,9 +171,9 @@ ModelNode*deleteNode(ModelNode*root, CarModel key) {
         *root = *temp;
       free(temp);
     } else {
-      ModelNode*temp = nodeWithMimumValue(root->right);
+      ModelNode*temp = RateNodeWithMimumValue(root->right);
       root->key = temp->key;
-      root->right = deleteNode(root->right,
+      root->right = deleteRateNode(root->right,
                    temp->key);
     }
   }

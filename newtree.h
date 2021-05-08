@@ -1,25 +1,22 @@
 #ifndef NEW_TREE
 #define NEW_TREE
 #include <iostream>
-#include "class.h"
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "cars.h"
 
-class Node {
+class NewNode {
   public:
   CarType* key;
-  Node *left;
-  Node *right;
+  NewNode *left;
+  NewNode *right;
   int height;
   CarModel* newlist;
-  Node(CarType* key);
+  NewNode(CarType* key);
 };
 
 // int max(int a, int b);
 
 // Calculate height
-int height(Node* N) {
+int height(NewNode* N) {
   if (N == NULL)
     return 0;
   return N->height;
@@ -30,8 +27,8 @@ int max(int a, int b) {
 }
 
 // New Node creation
-Node* newNode(CarType* key) {
-  Node *node = new Node(key);
+NewNode* newNewNode(CarType* key) {
+  NewNode *node = new NewNode(key);
   node->key = key;
   node->left = NULL;
   node->right = NULL;
@@ -40,9 +37,9 @@ Node* newNode(CarType* key) {
 }
 
 // Rotate right
-Node *rightRotate(Node *y) {
-  Node *x = y->left;
-  Node *T2 = x->right;
+NewNode* rightRotate(NewNode* y) {
+  NewNode *x = y->left;
+  NewNode *T2 = x->right;
   x->right = y;
   y->left = T2;
   y->height = max(height(y->left),
@@ -55,9 +52,9 @@ Node *rightRotate(Node *y) {
 }
 
 // Rotate left
-Node *leftRotate(Node *x) {
-  Node *y = x->right;
-  Node *T2 = y->left;
+NewNode* leftRotate(NewNode* x) {
+  NewNode *y = x->right;
+  NewNode *T2 = y->left;
   y->left = x;
   x->right = T2;
   x->height = max(height(x->left),
@@ -70,7 +67,7 @@ Node *leftRotate(Node *x) {
 }
 
 // Get the balance factor of each Node
-int getBalanceFactor(Node *N) {
+int getBalanceFactor(NewNode* N) {
   if (N == NULL)
     return 0;
   return height(N->left) -
@@ -78,14 +75,14 @@ int getBalanceFactor(Node *N) {
 }
 
 // Insert a Node
-Node *insertNode(Node *node, CarType key) {
+NewNode* insertNewNode(NewNode* node, CarType* key) {
   // Find the correct postion and insert the Node
   if (node == NULL)
-    return (newNode(key));
+    return (newNewNode(key));
   if (node->key> key)
-    node->left = insertNode(node->left, key);
+    node->left = insertNewNode(node->left, key);
   else if (key > node->key)
-    node->right = insertNode(node->right, key);
+    node->right = insertNewNode(node->right, key);
   else
     return node;
 
@@ -114,26 +111,42 @@ Node *insertNode(Node *node, CarType key) {
 }
 
 // Node with minimum value
-Node *NodeWithMimumValue(Node *node) {
-  Node *current = node;
+NewNode* NewNodeWithMimumValue(NewNode* node) {
+  NewNode *current = node;
   while (current->left != NULL)
     current = current->left;
   return current;
 }
 
+NewNode *findTypeNode(NewNode *node, int type_id){
+
+  if(node==NULL){
+    return node;
+  }
+  if (node->key->type_id> type_id){
+    return (findTypeNode(node->left, type_id));
+  }
+  else if (type_id > node->key->type_id)
+  {
+    return (findTypeNode(node->right, type_id));
+  }
+  else
+    return node;
+}
+
 // Delete a Node
-Node *deleteNode(Node *root, CarType key) {
+NewNode* deleteNewNode(NewNode* root, CarType* key) {
   // Find the Node and delete it
   if (root == NULL)
     return root;
   if (root->key > key)
-    root->left = deleteNode(root->left, key);
+    root->left = deleteNewNode(root->left, key);
   else if (key > root->key)
-    root->right = deleteNode(root->right, key);
+    root->right = deleteNewNode(root->right, key);
   else {
     if ((root->left == NULL) ||
       (root->right == NULL)) {
-      Node *temp = root->left ? root->left : root->right;
+      NewNode *temp = root->left ? root->left : root->right;
       if (temp == NULL) {
         temp = root;
         root = NULL;
@@ -141,9 +154,9 @@ Node *deleteNode(Node *root, CarType key) {
         *root = *temp;
       free(temp);
     } else {
-      Node *temp = NodeWithMimumValue(root->right);
+      NewNode *temp = NewNodeWithMimumValue(root->right);
       root->key = temp->key;
-      root->right = deleteNode(root->right,
+      root->right = deleteNewNode(root->right,
                    temp->key);
     }
   }
