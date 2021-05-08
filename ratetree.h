@@ -75,30 +75,30 @@ int getBalanceFactor(ModelNode* N) {
 }
 
 //Find the correct postion by rate and id
-ModelNode* findNodeByRate(ModelNode* node, int rate, int modelid, int type_id){
+ModelNode* findRateNodeByRate(ModelNode* node, int rate, int modelid, int type_id){
   if(node==NULL){
     return node;
   }
   if (node->key->rate > rate){
-    return (findNodeByRate(node->left, rate,modelid, type_id));
+    return (findRateNodeByRate(node->left, rate,modelid, type_id));
   }
   else if (node->key->rate < rate)
   {
-    return (findNodeByRate(node->right, rate,modelid, type_id));
+    return (findRateNodeByRate(node->right, rate,modelid, type_id));
   }
   else{
     if(node->key->type_id > type_id){
-      return (findNodeByRate(node->left, rate,modelid, type_id));
+      return (findRateNodeByRate(node->left, rate,modelid, type_id));
     }
     else if (node->key->type_id < type_id){
-      return (findNodeByRate(node->right, rate,modelid, type_id));
+      return (findRateNodeByRate(node->right, rate,modelid, type_id));
     }
     else{
       if(node->key->model_id > modelid){
-        return (findNodeByRate(node->left, rate,modelid, type_id));
+        return (findRateNodeByRate(node->left, rate,modelid, type_id));
       }
       else if(node->key->model_id < modelid){
-        return (findNodeByRate(node->right, rate,modelid, type_id));
+        return (findRateNodeByRate(node->right, rate,modelid, type_id));
       }
       else
         return node;
