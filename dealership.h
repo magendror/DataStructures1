@@ -11,12 +11,12 @@ class Dealership
 public:
     TypeNode *type_tree;
     NewNode *new_tree;
-    ModelNode *rate_tree;
+    RateNode *rate_tree;
     SalesNode *sales_tree;
-    ModelNode *WorstRate;
-    ModelNode *WorstRateNew;
-    ModelNode *WorstSecondRate;
-    ModelNode *WorstSecondRateNew;
+    RateNode *WorstRate;
+    NewNode *WorstRateNew;
+    RateNode *WorstSecondRate;
+    NewNode *WorstSecondRateNew;
     int NumOfModels;
     SalesNode *MaxSales;
     Dealership();

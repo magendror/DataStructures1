@@ -4,27 +4,27 @@
 #include "cars.h"
 
 
-class RatelNode{
+class RateNode{
   public:
   CarModel* key;
-  RatelNode*left;
-  RatelNode*right;
+  RateNode*left;
+  RateNode*right;
   int height;
-  RatelNode(CarModel* key);
+  RateNode(CarModel* key);
 };
 
 // int max(int a, int b);
 
 // Calculate height
-int height(RatelNode*N) {
+int height(RateNode*N) {
   if (N == NULL)
     return 0;
   return N->height;
 }
 
-// New RatelNodecreation
-RatelNode* newRateNode(CarModel* key) {
-  RatelNode* node= new RatelNode(key);
+// New RateNodecreation
+RateNode* newRateNode(CarModel* key) {
+  RateNode* node= new RateNode(key);
   node->key = key;
   node->left = NULL;
   node->right = NULL;
@@ -33,9 +33,9 @@ RatelNode* newRateNode(CarModel* key) {
 }
 
 // Rotate right
-RatelNode* rightRotate(RatelNode* y) {
-  RatelNode* x = y->left;
-  RatelNode* T2 = x->right;
+RateNode* rightRotate(RateNode* y) {
+  RateNode* x = y->left;
+  RateNode* T2 = x->right;
   x->right = y;
   y->left = T2;
   y->height = max(height(y->left),height(y->right)) + 1;
@@ -44,9 +44,9 @@ RatelNode* rightRotate(RatelNode* y) {
 }
 
 // Rotate left
-RatelNode* leftRotate(RatelNode* x) {
-  RatelNode* y = x->right;
-  RatelNode* T2 = y->left;
+RateNode* leftRotate(RateNode* x) {
+  RateNode* y = x->right;
+  RateNode* T2 = y->left;
   y->left = x;
   x->right = T2;
   x->height = max(height(x->left),height(x->right)) + 1;
@@ -55,7 +55,7 @@ RatelNode* leftRotate(RatelNode* x) {
 }
 
 // Get the balance factor of each node
-int getBalanceFactor(RatelNode* N) {
+int getBalanceFactor(RateNode* N) {
   if (N == NULL){
     return 0;
   }
@@ -63,7 +63,7 @@ int getBalanceFactor(RatelNode* N) {
 }
 
 //Find the correct postion by rate and id
-RatelNode* findRateNodeByRate(RatelNode* node, int rate, int modelid, int type_id){
+RateNode* findRateNodeByRate(RateNode* node, int rate, int modelid, int type_id){
   if(node==NULL){
     return node;
   }
@@ -95,7 +95,7 @@ RatelNode* findRateNodeByRate(RatelNode* node, int rate, int modelid, int type_i
 
 
 // Insert a node
-RatelNode* insertRateNode(RatelNode* node, CarModel* key) {
+RateNode* insertRateNode(RateNode* node, CarModel* key) {
   // Find the correct postion and insert the node
   if (node== NULL)
     return (newRateNode(key));
@@ -106,7 +106,7 @@ RatelNode* insertRateNode(RatelNode* node, CarModel* key) {
   else
     return node;
 
-  // Update the balance factor of each RatelNodeand
+  // Update the balance factor of each RateNodeand
   // balance the tree
   node->height = 1 + max(height(node->left),
                height(node->right));
@@ -132,9 +132,9 @@ RatelNode* insertRateNode(RatelNode* node, CarModel* key) {
   return node;
 }
 
-// RatelNodewith minimum value
-RatelNode* RateNodeWithMimumValue(RatelNode* node) {
-  RatelNode*current = node;
+// RateNodewith minimum value
+RateNode* RateNodeWithMimumValue(RateNode* node) {
+  RateNode*current = node;
   while (current->left != NULL){
     current = current->left;
   }
@@ -142,8 +142,8 @@ RatelNode* RateNodeWithMimumValue(RatelNode* node) {
 }
 
 // Delete a node
-RatelNode* deleteRateNode(RatelNode* root, CarModel* key) {
-  // Find the RatelNodeand delete it
+RateNode* deleteRateNode(RateNode* root, CarModel* key) {
+  // Find the RateNodeand delete it
   if (root == NULL){
     return root;
   }
@@ -155,7 +155,7 @@ RatelNode* deleteRateNode(RatelNode* root, CarModel* key) {
   }
   else {
     if ((root->left == NULL) || (root->right == NULL)) {
-      RatelNode* temp = root->left ? root->left : root->right;
+      RateNode* temp = root->left ? root->left : root->right;
       if (temp == NULL) {
         temp = root;
         root = NULL;
@@ -166,7 +166,7 @@ RatelNode* deleteRateNode(RatelNode* root, CarModel* key) {
       free(temp);
     }
     else {
-      RatelNode*temp = RateNodeWithMimumValue(root->right);
+      RateNode*temp = RateNodeWithMimumValue(root->right);
       root->key = temp->key;
       root->right = deleteRateNode(root->right,temp->key);
     }
@@ -175,7 +175,7 @@ RatelNode* deleteRateNode(RatelNode* root, CarModel* key) {
     return root;
   }
 
-  // Update the balance factor of each RatelNodeand
+  // Update the balance factor of each RateNodeand
   // balance the tree
   root->height = 1 + max(height(root->left),height(root->right));
   int balanceFactor = getBalanceFactor(root);
