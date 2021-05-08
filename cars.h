@@ -102,6 +102,18 @@ bool CarModel::operator>(CarModel &model2)
     return true;
 }
 
+class CarModelList : public CarModel{
+    public:
+    CarModelList* next;
+    CarModelList* previous;
+    CarModelList(int model_id, bool sort_by_rate, int type_id, int num_of_sales=0, int rate=0);
+    ~CarModelList()=default;
+};
+
+CarModelList::CarModelList(int model_id, bool sort_by_rate, int type_id, int num_of_sales, int rate) : 
+                                    CarModel(model_id,sort_by_rate,type_id,num_of_sales,rate),next(NULL),previous(NULL)
+{}
+
 class CarType
 {
 public:
@@ -109,22 +121,36 @@ public:
     int num_of_models;
     int best_seller;
     int best_seller_sales;
-    int *statistics;
-    CarModel **pointers;
-    CarType(int type_id, int num_of_models,int best_seller=0, int best_seller_sales=0);
+    int** statistics;
+    CarModelList **pointers;
+    CarType(int type_id, int num_of_models=0,int best_seller=0, int best_seller_sales=0);
     ~CarType();
     bool operator>(CarType &model2);
 };
 
+int** creatArrey(int num_of_models){
+    int** temp = new int*[2];
+    temp[0] = new int[num_of_models];
+    temp[1] = new int[num_of_models];
+    for(int i=0;i<num_of_models;i++){
+        temp[0][i]=0;
+        temp[1][i]=0;    
+    }
+    return temp;
+}
+
 CarType::CarType(int type_id, int num_of_models,int best_seller, int best_seller_sales) : type_id(type_id), num_of_models(num_of_models),
                                                     best_seller(best_seller),best_seller_sales(best_seller_sales),
-                                                    statistics(new int[2 * num_of_models]),pointers(new CarModel *[num_of_models])
+                                                    statistics(creatArrey(num_of_models)),pointers(new CarModelList*[num_of_models])
 {
+
 }
 
 CarType::~CarType()
 {
     delete[] pointers;
+    delete[] statistics[0];
+    delete[] statistics[1];
     delete[] statistics;
 }
 bool CarType::operator>(CarType &type2)
@@ -140,5 +166,8 @@ bool CarType::operator>(CarType &type2)
     }
 }
 
+int max(int a, int b) {
+  return (a > b) ? a : b;
+}
 
 #endif

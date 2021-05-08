@@ -9,16 +9,16 @@
 class Dealership
 {
 public:
-    TypeNode *type_tree;
-    NewNode *new_tree;
-    RateNode *rate_tree;
-    SalesNode *sales_tree;
-    RateNode *WorstRate;
-    NewNode *WorstRateNew;
-    RateNode *WorstSecondRate;
-    NewNode *WorstSecondRateNew;
+    TypeNode* type_tree;
+    NewNode* new_tree;
+    RateNode* rate_tree;
+    SalesNode* sales_tree;
+    RateNode* WorstRate;
+    NewNode* WorstRateNew;
+    RateNode* WorstSecondRate;
+    NewNode* WorstSecondRateNew;
     int NumOfModels;
-    SalesNode *MaxSales;
+    SalesNode* MaxSales;
     Dealership();
     ~Dealership();
 };

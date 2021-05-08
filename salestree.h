@@ -127,6 +127,15 @@ SalesNode* SalesNodeWithMimumValue(SalesNode*node) {
   }
   return current;
 }
+
+SalesNode* SalesNodeWithMaxValue(SalesNode*node) {
+  SalesNode*current = node;
+  while (current->right != NULL){
+    current = current->right;
+  }
+  return current;
+}
+
 ////Find the correct postion by sales and id
 SalesNode *findSalesNodeBySales(SalesNode *node, int sales, int modelid, int type_id){
   if(node==NULL){
