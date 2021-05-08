@@ -9,7 +9,7 @@ class NewNode {
   NewNode *left;
   NewNode *right;
   int height;
-  CarModel* newlist;
+  CarModelList* newlist;
   NewNode(CarType* key);
 };
 
