@@ -10,7 +10,7 @@ class Dealership
 {
 public:
     TypeNode *type_tree;
-    Node *new_tree;
+    NewNode *new_tree;
     ModelNode *rate_tree;
     SalesNode *sales_tree;
     ModelNode *WorstRate;
@@ -30,3 +30,4 @@ Dealership::Dealership() : type_tree(NULL), new_tree(NULL), rate_tree(NULL), sal
 }
 
 Dealership::~Dealership() {}
+#endif

@@ -112,8 +112,8 @@ StatusType AddCarType(void *DS, int typeID, int numOfModels){
     CarType* type = new CarType(typeID,numOfModels);
     CarType* new_type = new CarType(typeID,numOfModels);
     insertTypeNode(DS_convert->type_tree,type);
-    insertNode(DS_convert->new_tree,new_type);
-    ();
+    insertNewNode(DS_convert->new_tree,new_type);
+    findNewNode(DS_convert->new_tree,typeID);
     return SUCCESS;
 }
 

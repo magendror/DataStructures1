@@ -27,7 +27,7 @@ int max(int a, int b) {
 }
 
 // New ModelNodecreation
-ModelNode* newNode(CarModel* key) {
+ModelNode* newRateNode(CarModel* key) {
   ModelNode* node= new ModelNode(key);
   node->key = key;
   node->left = NULL;
@@ -108,14 +108,14 @@ ModelNode* findNodeByRate(ModelNode* node, int rate, int modelid, int type_id){
 
 
 // Insert a node
-ModelNode* insertNode(ModelNode* node, CarModel* key) {
+ModelNode* insertRateNode(ModelNode* node, CarModel* key) {
   // Find the correct postion and insert the node
   if (node== NULL)
-    return (newNode(key));
+    return (newRateNode(key));
   if (node->key> key)
-    node->left = insertNode(node->left, key);
+    node->left = insertRateNode(node->left, key);
   else if (key > node->key)
-    node->right = insertNode(node->right, key);
+    node->right = insertRateNode(node->right, key);
   else
     return node;
 

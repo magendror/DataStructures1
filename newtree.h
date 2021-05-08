@@ -118,17 +118,17 @@ NewNode* NewNodeWithMimumValue(NewNode* node) {
   return current;
 }
 
-NewNode *findTypeNode(NewNode *node, int type_id){
+NewNode *findNewNode(NewNode *node, int type_id){
 
   if(node==NULL){
     return node;
   }
   if (node->key->type_id> type_id){
-    return (findTypeNode(node->left, type_id));
+    return (findNewNode(node->left, type_id));
   }
   else if (type_id > node->key->type_id)
   {
-    return (findTypeNode(node->right, type_id));
+    return (findNewNode(node->right, type_id));
   }
   else
     return node;
