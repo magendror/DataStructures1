@@ -99,7 +99,7 @@ bool CarModel::operator>(CarModel &model2)
             }
         }
     }
-    return true;
+    return false;
 }
 
 class CarModelList : public CarModel{
