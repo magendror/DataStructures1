@@ -13,8 +13,6 @@ class SalesNode{
   SalesNode(CarModel* key);
 };
 
-// int max(int a, int b);
-
 // Calculate height
 int height(SalesNode* N) {
   if (N == NULL){
@@ -34,25 +32,25 @@ SalesNode* newSalesNode(CarModel* key) {
 }
 
 // Rotate right
-SalesNode* rightRotate(SalesNode* y) {
-  SalesNode*x = y->left;
-  SalesNode*T2 = x->right;
-  x->right = y;
-  y->left = T2;
-  y->height = max(height(y->left),height(y->right)) + 1;
-  x->height = max(height(x->left),height(x->right)) + 1;
-  return x;
+SalesNode* rightRotate(SalesNode* n) {
+  SalesNode* temp_left = n->left;
+  SalesNode* temp_right = temp_left->right;
+  temp_left->right = n;
+  n->left = temp_right;
+  n->height = max(height(n->left),height(n->right)) + 1;
+  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  return temp_left;
 }
 
 // Rotate left
 SalesNode* leftRotate(SalesNode* x) {
-  SalesNode* y = x->right;
-  SalesNode* T2 = y->left;
-  y->left = x;
-  x->right = T2;
+  SalesNode* temp_left = x->right;
+  SalesNode* temp_right = temp_left->left;
+  temp_left->left = x;
+  x->right = temp_right;
   x->height = max(height(x->left),height(x->right)) + 1;
-  y->height = max(height(y->left),height(y->right)) + 1;
-  return y;
+  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  return temp_left;
 }
 
 // Get the balance factor of each node

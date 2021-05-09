@@ -31,25 +31,25 @@ TypeNode *newTypeNode(CarType* key) {
 }
 
 // Rotate right
-TypeNode *rightRotate(TypeNode *y) {
-  TypeNode *x = y->left;
-  TypeNode *T2 = x->right;
-  x->right = y;
-  y->left = T2;
-  y->height = max(height(y->left),height(y->right)) + 1;
-  x->height = max(height(x->left),height(x->right)) + 1;
-  return x;
+TypeNode *rightRotate(TypeNode *n) {
+  TypeNode* temp_left = n->left;
+  TypeNode* temp_right = temp_left->right;
+  temp_left->right = n;
+  n->left = temp_right;
+  n->height = max(height(n->left),height(n->right)) + 1;
+  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  return temp_left;
 }
 
 // Rotate left
 TypeNode *leftRotate(TypeNode *x) {
-  TypeNode* y = x->right;
-  TypeNode* T2 = y->left;
-  y->left = x;
-  x->right = T2;
+  TypeNode* temp_left = x->right;
+  TypeNode* temp_right = temp_left->left;
+  temp_left->left = x;
+  x->right = temp_right;
   x->height = max(height(x->left),height(x->right)) + 1;
-  y->height = max(height(y->left),height(y->right)) + 1;
-  return y;
+  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  return temp_left;
 }
 
 // Get the balance factor of each TypeNode

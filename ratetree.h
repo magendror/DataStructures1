@@ -9,11 +9,10 @@ class RateNode{
   CarModel* key;
   RateNode*left;
   RateNode*right;
+  RateNode *father;
   int height;
   RateNode(CarModel* key);
 };
-
-// int max(int a, int b);
 
 // Calculate height
 int height(RateNode*N) {
@@ -23,35 +22,42 @@ int height(RateNode*N) {
 }
 
 // New RateNodecreation
-RateNode* newRateNode(CarModel* key) {
+RateNode* newRateNode(CarModel* key,RateNode *father) {
   RateNode* node= new RateNode(key);
   node->key = key;
   node->left = NULL;
   node->right = NULL;
+  node->father=father;
   node->height = 1;
   return (node);
 }
 
 // Rotate right
-RateNode* rightRotate(RateNode* y) {
-  RateNode* x = y->left;
-  RateNode* T2 = x->right;
-  x->right = y;
-  y->left = T2;
-  y->height = max(height(y->left),height(y->right)) + 1;
-  x->height = max(height(x->left),height(x->right)) + 1;
-  return x;
+RateNode* rightRotate(RateNode* n) {
+  RateNode* temp_left = n->left;
+  RateNode* temp_right = temp_left->right;
+  temp_left->right = n;
+  n->left = temp_right;
+  temp_left->father=n->father;
+  n->father=temp_left;
+  temp_right->father=n;
+  n->height = max(height(n->left),height(n->right)) + 1;
+  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  return temp_left;
 }
 
 // Rotate left
 RateNode* leftRotate(RateNode* x) {
-  RateNode* y = x->right;
-  RateNode* T2 = y->left;
-  y->left = x;
-  x->right = T2;
+  RateNode* temp_left = x->right;
+  RateNode* temp_right = temp_left->left;
+  temp_left->left = x;
+  x->right = temp_right;
+  temp_left->father=x->father;
+  x->father=temp_left;
+  temp_right->father=x;
   x->height = max(height(x->left),height(x->right)) + 1;
-  y->height = max(height(y->left),height(y->right)) + 1;
-  return y;
+  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  return temp_left;
 }
 
 // Get the balance factor of each node
@@ -95,14 +101,14 @@ RateNode* findRateNodeByRate(RateNode* node, int rate, int modelid, int type_id)
 
 
 // Insert a node
-RateNode* insertRateNode(RateNode* node, CarModel* key) {
+RateNode* insertRateNode(RateNode* node, CarModel* key,RateNode *father=NULL) {
   // Find the correct postion and insert the node
   if (node== NULL)
-    return (newRateNode(key));
+    return (newRateNode(key,father));
   if (*(node->key)> *(key))
-    node->left = insertRateNode(node->left, key);
+    node->left = insertRateNode(node->left, key, node);
   else if (*(key) > *(node->key))
-    node->right = insertRateNode(node->right, key);
+    node->right = insertRateNode(node->right, key, node);
   else
     return node;
 
