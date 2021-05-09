@@ -147,7 +147,7 @@ TypeNode *deleteTypeNode(TypeNode *root, CarType* key) {
       }
       else
         *root = *temp;
-      free(temp);
+      delete temp;
     }
     else {
       TypeNode *temp = TypeNodeWithMimumValue(root->right);

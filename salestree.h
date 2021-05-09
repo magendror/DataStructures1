@@ -93,7 +93,6 @@ SalesNode* insertSalesNode(SalesNode* node, CarModel* key) {
   else{
     return node;
   }
-
   // Update the balance factor of each SalesNodeand
   // balance the tree
   node->height = 1 + max(height(node->left),height(node->right));
@@ -170,7 +169,7 @@ SalesNode *findSalesNodeBySales(SalesNode *node, int sales, int modelid, int typ
 
 
 // Delete a node
-SalesNode*deleteSalesNode(SalesNode*root, CarModel* key) {
+SalesNode* deleteSalesNode(SalesNode*root, CarModel* key) {
   // Find the SalesNodeand delete it
   if (root == NULL)
     return root;
@@ -179,8 +178,7 @@ SalesNode*deleteSalesNode(SalesNode*root, CarModel* key) {
   else if (*(key) > *(root->key))
     root->right = deleteSalesNode(root->right, key);
   else {
-    if ((root->left == NULL) ||
-      (root->right == NULL)) {
+    if ((root->left == NULL) || (root->right == NULL)) {
       SalesNode* temp = root->left ? root->left : root->right;
       if (temp == NULL) {
         temp = root;
@@ -189,7 +187,7 @@ SalesNode*deleteSalesNode(SalesNode*root, CarModel* key) {
       else{
         *root = *temp;
       }
-      free(temp);
+      delete temp;
     }
     else {
       SalesNode* temp = SalesNodeWithMimumValue(root->right);
@@ -197,10 +195,8 @@ SalesNode*deleteSalesNode(SalesNode*root, CarModel* key) {
       root->right = deleteSalesNode(root->right,temp->key);
     }
   }
-
   if (root == NULL)
     return root;
-
   // Update the balance factor of each SalesNodeand
   // balance the tree
   root->height = 1 + max(height(root->left),height(root->right));

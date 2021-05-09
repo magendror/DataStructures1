@@ -163,7 +163,7 @@ RateNode* deleteRateNode(RateNode* root, CarModel* key) {
       else{
         *root = *temp;
       }
-      free(temp);
+      delete temp;
     }
     else {
       RateNode*temp = RateNodeWithMimumValue(root->right);

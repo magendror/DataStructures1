@@ -21,7 +21,12 @@ void updatePointers(Dealership* DS){
     DS->WorstRate=RateNodeWithMimumValue(DS->rate_tree);
     DS->WorstSecondRate=RateNodeWithMimumValue(DS->rate_tree->right);
     DS->WorstRateNew=NewNodeWithMimumValue(DS->new_tree);
+    DS->WorstSecondRateNew=NewNodeWithMimumValue(DS->new_tree->right);
+}
+
+void updatePointersMinimalistic(Dealership* DS){
     DS->WorstRateNew=NewNodeWithMimumValue(DS->new_tree);
+    DS->WorstSecondRateNew=NewNodeWithMimumValue(DS->new_tree->right);
 }
 
 StatusType RemoveCarType(void *DS, int typeID){
@@ -34,56 +39,63 @@ StatusType RemoveCarType(void *DS, int typeID){
     if(type_node==NULL){
         return FAILURE;
     }
+    //delete from rate and sales tree
     int numofmodels=type_node->key->num_of_models;
     int rate,sales;
     for(int i=0;i< numofmodels;i++){
         rate=type_node->key->statistics[0][i];
         sales=type_node->key->statistics[1][i];
-        RateNode* model_node = findRateNodeByRate(DS_convert->rate_tree,rate,i,typeID);
-
-        //need to delete the key itself, need to check if sales!=0!!!!//
-
-        DS_convert->rate_tree=deleteRateNode(DS_convert->rate_tree,model_node->key);
-        SalesNode=findSalesNodeBySales(DS_convert->sales_tree,sales,i,typeID);
-        DS_convert->sales_tree=deleteSalesNode(DS_convert->sales_tree,model_node->key);
-        (DS_convert->NumOfModels)--;
-
-        //!!!pointers become NULL when exits list (when sold), should go over list!!!/// 
-
-        while(type_node->key->pointers!=NULL){ ////list delete
-            CarModel *nextcar=*(type_node->key->pointers++);
-
-
-            //!!!dont realese data of the key. the key realese its own data in the d'tor!!!///
-            delete(type_node->key->pointers);
-
-            *(type_node->key->pointers)=nextcar;
-            (DS_convert->NumOfModels)--;
+        if(sales!=0){
+            RateNode* model_node_rate = findRateNodeByRate(DS_convert->rate_tree,rate,i,typeID);
+            CarModel* temp = model_node_rate->key;
+            DS_convert->rate_tree=deleteRateNode(DS_convert->rate_tree,temp);
+            delete temp;
+            SalesNode* model_node_sales=findSalesNodeBySales(DS_convert->sales_tree,sales,i,typeID);
+            temp = model_node_sales->key;
+            DS_convert->sales_tree=deleteSalesNode(DS_convert->sales_tree,temp);
+            delete temp;
         }
-        DS_convert->type_tree=deleteTypeNode(DS_convert->type_tree,type_node->key);
+        //delete list from new tree
+        for(int i=0;i<type_node->key->num_of_models;i++){
+            if (type_node->key->pointers[i]!=NULL){
+                delete type_node->key->pointers[i];
+            } 
+        }
+        NewNode *new_node=findNewNode(DS_convert->new_tree,typeID);
+        CarType* temp_type = new_node->key;
+        deleteNewNode(DS_convert->new_tree,temp_type);
+        delete temp_type;
+        //delete from new tree
+        temp_type = type_node->key;
+        DS_convert->type_tree=deleteTypeNode(DS_convert->type_tree,temp_type);
+        (DS_convert->NumOfModels)-=temp_type->num_of_models;
+        delete temp_type;
         updatePointers(DS_convert);
         return SUCCESS;
     }
-    //////
-
 }
-
 
 StatusType makeComplaint(void *DS, int typeID, int modelID, int t){
     Dealership* DS_convert = (Dealership*)DS;
-    if(DS==NULL || typeID<=0 || DS_convert->NumOfModels<modelID||modelID<0){
+    if(DS==NULL || typeID<=0 ||modelID<0){
          return INVALID_INPUT;
     }
-    TypeNode *typenode=findTypeNode(DS_convert->type_tree,typeID);
-    if(typenode==NULL){
+    TypeNode *type_node=findTypeNode(DS_convert->type_tree,typeID);
+    if(type_node==NULL){
+        return FAILURE;
+    }
+    if(type_node->key->num_of_models<modelID){
         return FAILURE;
     }
     int newrate=100/t;
-    int rate=typenode->key->statistics[0][modelID];
-    RateNode* modelnode=findRateNodeByRate(DS_convert->rate_tree,rate,modelID,typeID);
-    DS_convert->rate_tree = deleteRateNode(DS_convert->rate_tree,modelnode->key);
-    modelnode->key->rate=modelnode->key->rate-newrate;
-    DS_convert->rate_tree=insertRateNode(DS_convert->rate_tree,modelnode->key);
+    int rate=type_node->key->statistics[0][modelID];
+    RateNode* model_node=findRateNodeByRate(DS_convert->rate_tree,rate,modelID,typeID);
+    CarModel* temp = model_node->key;
+    ///!!!need to check returning new root after delete!!!///
+    DS_convert->rate_tree = deleteRateNode(DS_convert->rate_tree,model_node->key);
+    model_node->key->rate=model_node->key->rate-newrate;
+    type_node->key->statistics[0][modelID]-=newrate;
+    DS_convert->rate_tree=insertRateNode(DS_convert->rate_tree,model_node->key);
     updatePointers(DS_convert);
     return SUCCESS;
 }
@@ -124,8 +136,8 @@ StatusType AddCarType(void *DS, int typeID, int numOfModels){
     }
     CarType* type = new CarType(typeID,numOfModels);
     CarType* new_type = new CarType(typeID,numOfModels);
-    insertTypeNode(DS_convert->type_tree,type);
-    insertNewNode(DS_convert->new_tree,new_type);
+    DS_convert->type_tree = insertTypeNode(DS_convert->type_tree,type);
+    DS_convert->new_tree = insertNewNode(DS_convert->new_tree,new_type);
     NewNode* in_new_tree = findNewNode(DS_convert->new_tree,typeID);
     in_type_tree = findTypeNode(DS_convert->type_tree,typeID);
     for (int i=0;i<numOfModels;i++){
@@ -134,17 +146,21 @@ StatusType AddCarType(void *DS, int typeID, int numOfModels){
         if (i==0){
             in_new_tree->newlist=model;
         }
-        else{
+        else if(i==numOfModels-1){
             in_type_tree->key->pointers[i]->previous=in_type_tree->key->pointers[i-1];   
+        }
+        else{
+            in_type_tree->key->pointers[i]->previous=in_type_tree->key->pointers[i-1];
+            in_type_tree->key->pointers[i-1]->next=in_type_tree->key->pointers[i];
         }
     }
     DS_convert->NumOfModels+=numOfModels;
+    updatePointersMinimalistic(DS_convert);
     return SUCCESS;
 }
 
-StatusType SellCarForFirstTime(void *DS, int typeID, int modelID){
+void SellCarForFirstTime(void *DS, int typeID, int modelID){
     Dealership* DS_convert = (Dealership*)DS;
-    //if wasent sold yet
     NewNode* in_new_tree = findNewNode(DS_convert->new_tree,typeID);
     TypeNode* in_type_tree = findTypeNode(DS_convert->type_tree,typeID);
     //if first in list
@@ -158,7 +174,8 @@ StatusType SellCarForFirstTime(void *DS, int typeID, int modelID){
         //if also last in list - now list empty
         if(in_new_tree->newlist==NULL){
             CarType* temp = new CarType(typeID);
-            deleteNewNode(DS_convert->new_tree,temp);    
+            DS_convert->new_tree=deleteNewNode(DS_convert->new_tree,temp);
+            delete temp;    
         }
     }
     //if not first in list
@@ -170,7 +187,6 @@ StatusType SellCarForFirstTime(void *DS, int typeID, int modelID){
         delete in_type_tree->key->pointers[modelID];
         in_type_tree->key->pointers[modelID]=NULL;
     }
-    return SUCCESS; 
 }
 
 StatusType SellCar(void *DS, int typeID, int modelID){
@@ -195,6 +211,7 @@ StatusType SellCar(void *DS, int typeID, int modelID){
         (in_type_tree->key->statistics[1][modelID])++;
         (in_type_tree->key->statistics[0][modelID])+=10;
     }
+    //if was sold already
     else{
         RateNode* old_rate = findRateNodeByRate(DS_convert->rate_tree,in_type_tree->key->statistics[0][modelID],
                                                 modelID,typeID);
@@ -206,11 +223,12 @@ StatusType SellCar(void *DS, int typeID, int modelID){
         sales->num_of_sales=in_type_tree->key->statistics[1][modelID];
         CarModel* old_rate_model = old_rate->key;
         CarModel* old_sales_model = old_sales->key;
-        deleteRateNode(DS_convert->rate_tree,old_rate_model);
-        deleteSalesNode(DS_convert->sales_tree,old_sales_model);
+        DS_convert->rate_tree=deleteRateNode(DS_convert->rate_tree,old_rate_model);
+        DS_convert->sales_tree=deleteSalesNode(DS_convert->sales_tree,old_sales_model);
         delete old_rate_model;
         delete old_sales_model;
     }
+    //type best seller update
     if(in_type_tree->key->statistics[1][modelID]>in_type_tree->key->best_seller_sales){
         in_type_tree->key->best_seller_sales=in_type_tree->key->statistics[1][modelID];
         in_type_tree->key->best_seller=modelID;
@@ -219,8 +237,8 @@ StatusType SellCar(void *DS, int typeID, int modelID){
             modelID<in_type_tree->key->best_seller){
         in_type_tree->key->best_seller=modelID;
     }
-    insertRateNode(DS_convert->rate_tree,rate);
-    insertSalesNode(DS_convert->sales_tree,sales);
+    DS_convert->rate_tree=insertRateNode(DS_convert->rate_tree,rate);
+    DS_convert->sales_tree=insertSalesNode(DS_convert->sales_tree,sales);
     updatePointers(DS_convert);
     return SUCCESS;
 }
@@ -229,6 +247,13 @@ StatusType GetBestSellerModelByType(void *DS, int typeID, int *modelID){
     Dealership* DS_convert = (Dealership*)DS;
     if(DS==NULL||typeID<0){
         return INVALID_INPUT;
+    }
+    if(DS_convert->MaxSales==NULL&&DS_convert->NumOfModels>0){
+        *modelID=0;
+        return SUCCESS;
+    }
+    if(DS_convert->NumOfModels==0){
+        return FAILURE;
     }
     if (typeID==0){
         *modelID=DS_convert->MaxSales->key->model_id;

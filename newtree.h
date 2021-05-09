@@ -135,6 +135,9 @@ NewNode *findNewNode(NewNode *node, int type_id){
 }
 
 // Delete a Node
+
+///////Need to move also list, not just key!!!!////
+
 NewNode* deleteNewNode(NewNode* root, CarType* key) {
   // Find the Node and delete it
   if (root == NULL)
@@ -152,8 +155,9 @@ NewNode* deleteNewNode(NewNode* root, CarType* key) {
         root = NULL;
       } else
         *root = *temp;
-      free(temp);
-    } else {
+      delete temp;
+    }
+    else {
       NewNode *temp = NewNodeWithMimumValue(root->right);
       root->key = temp->key;
       root->right = deleteNewNode(root->right,
