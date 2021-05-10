@@ -8,12 +8,11 @@ class NewNode {
   CarType* key;
   NewNode *left;
   NewNode *right;
+  NewNode *father;
   int height;
   CarModelList* newlist;
   NewNode(CarType* key);
 };
-
-// int max(int a, int b);
 
 // Calculate height
 int height(NewNode* N) {
@@ -22,48 +21,43 @@ int height(NewNode* N) {
   return N->height;
 }
 
-int max(int a, int b) {
-  return (a > b) ? a : b;
-}
-
 // New Node creation
-NewNode* newNewNode(CarType* key) {
+NewNode* newNewNode(CarType* key,NewNode *father) {
   NewNode *node = new NewNode(key);
   node->key = key;
   node->left = NULL;
   node->right = NULL;
+  node->father=father;
   node->height = 1;
   return (node);
 }
 
 // Rotate right
-NewNode* rightRotate(NewNode* y) {
-  NewNode *x = y->left;
-  NewNode *T2 = x->right;
-  x->right = y;
-  y->left = T2;
-  y->height = max(height(y->left),
-          height(y->right)) +
-        1;
-  x->height = max(height(x->left),
-          height(x->right)) +
-        1;
-  return x;
+NewNode* rightRotate(NewNode* n) {
+  NewNode* temp_left = n->left;
+  NewNode* temp_right = temp_left->right;
+  temp_left->right = n;
+  n->left = temp_right;
+  temp_left->father=n->father;
+  n->father=temp_left;
+  temp_right->father=n;
+  n->height = max(height(n->left),height(n->right)) + 1;
+  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  return temp_left;
 }
 
 // Rotate left
 NewNode* leftRotate(NewNode* x) {
-  NewNode *y = x->right;
-  NewNode *T2 = y->left;
-  y->left = x;
-  x->right = T2;
-  x->height = max(height(x->left),
-          height(x->right)) +
-        1;
-  y->height = max(height(y->left),
-          height(y->right)) +
-        1;
-  return y;
+  NewNode* temp_left = x->right;
+  NewNode* temp_right = temp_left->left;
+  temp_left->left = x;
+  x->right = temp_right;
+  temp_left->father=x->father;
+  x->father=temp_left;
+  temp_right->father=x;
+  x->height = max(height(x->left),height(x->right)) + 1;
+  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  return temp_left;
 }
 
 // Get the balance factor of each Node
@@ -75,14 +69,14 @@ int getBalanceFactor(NewNode* N) {
 }
 
 // Insert a Node
-NewNode* insertNewNode(NewNode* node, CarType* key) {
+NewNode* insertNewNode(NewNode* node, CarType* key, NewNode *father=NULL) {
   // Find the correct postion and insert the Node
   if (node == NULL)
-    return (newNewNode(key));
+    return (newNewNode(key,father));
   if (node->key> key)
-    node->left = insertNewNode(node->left, key);
+    node->left = insertNewNode(node->left, key, node);
   else if (key > node->key)
-    node->right = insertNewNode(node->right, key);
+    node->right = insertNewNode(node->right, key, node);
   else
     return node;
 

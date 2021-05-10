@@ -40,9 +40,9 @@ StatusType RemoveCarType(void *DS, int typeID){
         return FAILURE;
     }
     //delete from rate and sales tree
-    int numofmodels=type_node->key->num_of_models;
+    int num_of_models=type_node->key->num_of_models;
     int rate,sales;
-    for(int i=0;i< numofmodels;i++){
+    for(int i=0;i< num_of_models;i++){
         rate=type_node->key->statistics[0][i];
         sales=type_node->key->statistics[1][i];
         if(sales!=0){
@@ -100,15 +100,31 @@ StatusType makeComplaint(void *DS, int typeID, int modelID, int t){
     return SUCCESS;
 }
 
-void inorder(RateNode* ratetree,NewNode *newtree,int *types, int *models){
-    if(ratetree==NULL){
+static void rateInorder(RateNode* rate_tree,int *types, int *models,int len,int *rate, int index=0){
+    if(rate_tree==NULL){
         return;
     }
-    inorder(ratetree->left,newtree,types,models);
-    if(ratetree->key->rate==0){
-
+    rateInorder(rate_tree->left,types,models,len,rate,index);
+    if(index<len){
+        types[index]=rate_tree->key->type_id;
+        models[index]=rate_tree->key->model_id;
+        rate[index]=rate_tree->key->rate;
+        index++;
     }
+    rateInorder(rate_tree->right,types,models,len,rate,index);
+}
 
+static void newInorder(NewNode* new_tree,int *types, int *models,int len,int index=0){
+    if(new_tree==NULL){
+        return;
+    }
+    newInorder(new_tree->left,types,models,len,index);
+    if(index<len){
+        types[index]=new_tree->key->type_id;
+        models[index]=new_tree->key->model_id;////need accsess to model_id
+        index++;
+    }
+    newInorder(new_tree->right,types,models,len,index);
 }
 
 StatusType GetWorstModels(void *DS, int numOfModels, int *types, int *models){
@@ -119,9 +135,54 @@ StatusType GetWorstModels(void *DS, int numOfModels, int *types, int *models){
     if(numOfModels>DS_convert->NumOfModels){
         return FAILURE;
     }
-    int counter=0;
-    RateNode* rate_node = RateNodeWithMimumValue(DS_convert->rate_tree);
-    while(counter<numOfModels){
+    int index=0;
+    int rate_types[numOfModels];
+    int rate_model[numOfModels];
+    int rate[numOfModels];
+    int new_types[numOfModels];
+    int new_model[numOfModels];
+    rateInorder(DS_convert->rate_tree,rate_types,rate_model,numOfModels,rate);
+    newInorder(DS_convert->new_tree,new_types,new_model,numOfModels);
+    while(rate[index]<0 && index<numOfModels){
+        types[index]=rate_types[index];
+        models[index]=rate_model[index];
+        index++;
+    }
+    if(rate[index]>0){
+        /// need to add Num of new//
+        int i;
+        for(i=0;i<DS_convert.NumOfNew;i++){
+            if(index+i<numOfModels)
+            types[index+i]=new_types[i];
+            models[index+i]=new_model[i];
+        }
+        index=index+i;
+        while(index<numOfModels){
+            types[index]=rate_types[index];
+            models[index]=rate_model[index];
+            index++;
+        }
+        return SUCCESS; 
+    }
+    ///rate[index]==0
+    else {
+        while(index<numOfModels){
+            while(rate_types[index]<new_types[index] && index<numOfModels){
+                types[index]=rate_types[index];
+                models[index]=rate_model[index];
+                index++;
+            }
+            while(rate_model[index]<new_model[index] && index<numOfModels){
+                types[index]=rate_types[index];
+                models[index]=rate_model[index];
+                index++;
+            }
+            if(index<numOfModels){
+                types[index]=new_types[index];
+                models[index]=new_model[index];
+                index++;
+            }
+        }
     }
 }
 
