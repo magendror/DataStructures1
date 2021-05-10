@@ -13,6 +13,9 @@ class RateNode{
   RateNode(CarModel* key);
 };
 
+RateNode::RateNode(CarModel* key):key(key),left(NULL),right(NULL),height(1){}
+
+
 // int max(int a, int b);
 
 // Calculate height
@@ -24,11 +27,11 @@ int height(RateNode*N) {
 
 // New RateNodecreation
 RateNode* newRateNode(CarModel* key) {
-  RateNode* node= new RateNode(key);
-  node->key = key;
+  RateNode* node = new RateNode(key);
+  /*node->key = key;
   node->left = NULL;
   node->right = NULL;
-  node->height = 1;
+  node->height = 1;*/
   return (node);
 }
 
