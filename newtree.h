@@ -11,8 +11,11 @@ class NewNode {
   NewNode *father;
   int height;
   CarModelList* newlist;
-  NewNode(CarType* key);
+  NewNode(CarType* key,NewNode *father);
+  ~NewNode()=default;
 };
+
+NewNode::NewNode(CarType* key,NewNode *father):key(key),left(NULL),right(NULL),father(father),height(1){}
 
 // Calculate height
 int height(NewNode* N) {
@@ -23,12 +26,7 @@ int height(NewNode* N) {
 
 // New Node creation
 NewNode* newNewNode(CarType* key,NewNode *father) {
-  NewNode *node = new NewNode(key);
-  node->key = key;
-  node->left = NULL;
-  node->right = NULL;
-  node->father=father;
-  node->height = 1;
+  NewNode *node = new NewNode(key,father);
   return (node);
 }
 

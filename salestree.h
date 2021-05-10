@@ -11,7 +11,10 @@ class SalesNode{
   SalesNode*right;
   int height;
   SalesNode(CarModel* key);
+  ~SalesNode()=default;
 };
+
+SalesNode::SalesNode(CarModel* key):key(key),left(NULL),right(NULL),height(1){}
 
 // Calculate height
 int height(SalesNode* N) {
@@ -24,10 +27,6 @@ int height(SalesNode* N) {
 // New SalesNodecreation
 SalesNode* newSalesNode(CarModel* key) {
   SalesNode* node= new SalesNode(key);
-  node->key = key;
-  node->left = NULL;
-  node->right = NULL;
-  node->height = 1;
   return (node);
 }
 

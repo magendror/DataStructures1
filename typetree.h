@@ -10,6 +10,7 @@ class TypeNode {
   TypeNode *right;
   int height;
   TypeNode(CarType* key);
+  ~TypeNode()=default;
 };
 
 // Calculate height
@@ -20,13 +21,11 @@ int height(TypeNode* N) {
   return N->height;
 }
 
+TypeNode::TypeNode(CarType* key):key(key),left(NULL),right(NULL),height(1){}
+
 // New TypeNode creation
 TypeNode *newTypeNode(CarType* key) {
   TypeNode *node = new TypeNode(key);
-  node->key = key;
-  node->left = NULL;
-  node->right = NULL;
-  node->height = 1;
   return (node);
 }
 
