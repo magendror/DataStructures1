@@ -59,6 +59,7 @@ StatusType RemoveCarType(void *DS, int typeID){
         for(int i=0;i<type_node->key->num_of_models;i++){
             if (type_node->key->pointers[i]!=NULL){
                 delete type_node->key->pointers[i];
+                (DS_convert->NumOfNewModels)--;
             } 
         }
         NewNode *new_node=findNewNode(DS_convert->new_tree,typeID);
@@ -151,7 +152,7 @@ StatusType GetWorstModels(void *DS, int numOfModels, int *types, int *models){
     if(rate[index]>0){
         /// need to add Num of new//
         int i;
-        for(i=0;i<DS_convert.NumOfNew;i++){
+        for(i=0;i<DS_convert->NumOfNewModels;i++){
             if(index+i<numOfModels)
             types[index+i]=new_types[i];
             models[index+i]=new_model[i];
@@ -216,6 +217,7 @@ StatusType AddCarType(void *DS, int typeID, int numOfModels){
         }
     }
     DS_convert->NumOfModels+=numOfModels;
+    DS_convert->NumOfNewModels+=numOfModels;
     updatePointersMinimalistic(DS_convert);
     return SUCCESS;
 }
@@ -248,6 +250,7 @@ void SellCarForFirstTime(void *DS, int typeID, int modelID){
         delete in_type_tree->key->pointers[modelID];
         in_type_tree->key->pointers[modelID]=NULL;
     }
+    (DS_convert->NumOfNewModels)--;
 }
 
 StatusType SellCar(void *DS, int typeID, int modelID){
