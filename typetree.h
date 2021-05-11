@@ -35,8 +35,8 @@ TypeNode *rightRotate(TypeNode *n) {
   TypeNode* temp_right = temp_left->right;
   temp_left->right = n;
   n->left = temp_right;
-  n->height = max(height(n->left),height(n->right)) + 1;
-  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  n->height = max_int(height(n->left),height(n->right)) + 1;
+  temp_left->height = max_int(height(temp_left->left),height(temp_left->right)) + 1;
   return temp_left;
 }
 
@@ -46,8 +46,8 @@ TypeNode *leftRotate(TypeNode *x) {
   TypeNode* temp_right = temp_left->left;
   temp_left->left = x;
   x->right = temp_right;
-  x->height = max(height(x->left),height(x->right)) + 1;
-  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  x->height = max_int(height(x->left),height(x->right)) + 1;
+  temp_left->height = max_int(height(temp_left->left),height(temp_left->right)) + 1;
   return temp_left;
 }
 
@@ -93,7 +93,7 @@ TypeNode* insertTypeNode(TypeNode* node, CarType* key) {
 
   // Update the balance factor of each TypeNode and
   // balance the tree
-  node->height = 1 + max(height(node->left),height(node->right));
+  node->height = 1 + max_int(height(node->left),height(node->right));
   int balanceFactor = getBalanceFactor(node);
   if (balanceFactor > 1) {
     if (*(node->left->key) > *(key)) {
@@ -160,7 +160,7 @@ TypeNode *deleteTypeNode(TypeNode *root, CarType* key) {
 
   // Update the balance factor of each TypeNode and
   // balance the tree
-  root->height = 1 + max(height(root->left),
+  root->height = 1 + max_int(height(root->left),
                height(root->right));
   int balanceFactor = getBalanceFactor(root);
   if (balanceFactor > 1) {

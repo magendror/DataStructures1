@@ -39,8 +39,8 @@ RateNode* rightRotate(RateNode* n) {
   temp_left->father=n->father;
   n->father=temp_left;
   temp_right->father=n;
-  n->height = max(height(n->left),height(n->right)) + 1;
-  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  n->height = max_int(height(n->left),height(n->right)) + 1;
+  temp_left->height = max_int(height(temp_left->left),height(temp_left->right)) + 1;
   return temp_left;
 }
 

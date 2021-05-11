@@ -166,7 +166,7 @@ bool CarType::operator>(CarType &type2)
     }
 }
 
-int max(int a, int b) {
+int max_int(int a, int b) {
   return (a > b) ? a : b;
 }
 

@@ -36,8 +36,8 @@ SalesNode* rightRotate(SalesNode* n) {
   SalesNode* temp_right = temp_left->right;
   temp_left->right = n;
   n->left = temp_right;
-  n->height = max(height(n->left),height(n->right)) + 1;
-  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  n->height = max_int(height(n->left),height(n->right)) + 1;
+  temp_left->height = max_int(height(temp_left->left),height(temp_left->right)) + 1;
   return temp_left;
 }
 
@@ -47,8 +47,8 @@ SalesNode* leftRotate(SalesNode* x) {
   SalesNode* temp_right = temp_left->left;
   temp_left->left = x;
   x->right = temp_right;
-  x->height = max(height(x->left),height(x->right)) + 1;
-  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  x->height = max_int(height(x->left),height(x->right)) + 1;
+  temp_left->height = max_int(height(temp_left->left),height(temp_left->right)) + 1;
   return temp_left;
 }
 
@@ -92,7 +92,7 @@ SalesNode* insertSalesNode(SalesNode* node, CarModel* key) {
   }
   // Update the balance factor of each SalesNodeand
   // balance the tree
-  node->height = 1 + max(height(node->left),height(node->right));
+  node->height = 1 + max_int(height(node->left),height(node->right));
   int balanceFactor = getBalanceFactor(node);
   if (balanceFactor > 1) {
     if (node->left->key> key) {
@@ -196,7 +196,7 @@ SalesNode* deleteSalesNode(SalesNode*root, CarModel* key) {
     return root;
   // Update the balance factor of each SalesNodeand
   // balance the tree
-  root->height = 1 + max(height(root->left),height(root->right));
+  root->height = 1 + max_int(height(root->left),height(root->right));
   int balanceFactor = getBalanceFactor(root);
   if (balanceFactor > 1) {
     if (getBalanceFactor(root->left) >= 0) {
