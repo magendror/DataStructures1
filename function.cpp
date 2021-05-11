@@ -11,7 +11,7 @@
 #include "cars.h"
 #include "dealership.h"
 
-void* init(){
+void* Init(){
     Dealership* ds=new Dealership();
     return ds;
 }
@@ -75,7 +75,7 @@ StatusType RemoveCarType(void *DS, int typeID){
     return SUCCESS;
 }
 
-StatusType makeComplaint(void *DS, int typeID, int modelID, int t){
+StatusType MakeComplaint(void *DS, int typeID, int modelID, int t){
     Dealership* DS_convert = (Dealership*)DS;
     if(DS==NULL || typeID<=0 ||modelID<0){
          return INVALID_INPUT;
@@ -449,8 +449,8 @@ void clearNewNode(NewNode* current){
     delete current;
 }
 
-void Quit(void *DS){
-    Dealership* DS_convert = (Dealership*)DS;
+void Quit(void **DS){
+    Dealership* DS_convert = (Dealership*)*DS;
     clearSalesNode(DS_convert->sales_tree);
     clearNewNode(DS_convert->new_tree);
     clearTypeNode(DS_convert->type_tree);

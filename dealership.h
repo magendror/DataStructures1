@@ -18,6 +18,7 @@ public:
     RateNode* WorstSecondRate;
     NewNode* WorstSecondRateNew;
     int NumOfModels;
+    int NumOfNewModels;
     SalesNode* MaxSales;
     Dealership();
     ~Dealership();
@@ -25,7 +26,7 @@ public:
 
 Dealership::Dealership() : type_tree(NULL), new_tree(NULL), rate_tree(NULL), sales_tree(NULL), WorstRate(NULL),
                            WorstRateNew(NULL), WorstSecondRate(NULL), WorstSecondRateNew(NULL), NumOfModels(0),
-                           MaxSales(NULL)
+                           NumOfNewModels(0), MaxSales(NULL)
 {
 }
 
