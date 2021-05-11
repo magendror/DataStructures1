@@ -53,8 +53,8 @@ RateNode* leftRotate(RateNode* x) {
   temp_left->father=x->father;
   x->father=temp_left;
   temp_right->father=x;
-  x->height = max(height(x->left),height(x->right)) + 1;
-  temp_left->height = max(height(temp_left->left),height(temp_left->right)) + 1;
+  x->height = max_int(height(x->left),height(x->right)) + 1;
+  temp_left->height = max_int(height(temp_left->left),height(temp_left->right)) + 1;
   return temp_left;
 }
 
@@ -112,8 +112,7 @@ RateNode* insertRateNode(RateNode* node, CarModel* key,RateNode *father=NULL) {
 
   // Update the balance factor of each RateNodeand
   // balance the tree
-  node->height = 1 + max(height(node->left),
-               height(node->right));
+  node->height = 1 + max_int(height(node->left),height(node->right));
   int balanceFactor = getBalanceFactor(node);
   if (balanceFactor > 1) {
     if (*(node->left->key) > *(key)) {
@@ -181,7 +180,7 @@ RateNode* deleteRateNode(RateNode* root, CarModel* key) {
 
   // Update the balance factor of each RateNodeand
   // balance the tree
-  root->height = 1 + max(height(root->left),height(root->right));
+  root->height = 1 + max_int(height(root->left),height(root->right));
   int balanceFactor = getBalanceFactor(root);
   if (balanceFactor > 1) {
     if (getBalanceFactor(root->left) >= 0) {
