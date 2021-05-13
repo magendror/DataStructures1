@@ -187,6 +187,11 @@ StatusType GetWorstModels(void *DS, int numOfModels, int *types, int *models){
     }
 
     if(index>=numOfModels){
+        delete[] rate_types;
+        delete[] rate_model;
+        delete[] rate;
+        delete[] new_types;
+        delete[] new_model;
         return SUCCESS;
     }
     while(index<numOfModels&&index_rate<max_rate){
