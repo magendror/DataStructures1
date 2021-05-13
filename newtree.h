@@ -8,14 +8,13 @@ class NewNode {
   CarType* key;
   NewNode *left;
   NewNode *right;
-  NewNode *father;
   int height;
   CarModelList* newlist;
-  NewNode(CarType* key,NewNode *father);
+  NewNode(CarType* key);
   ~NewNode()=default;
 };
 
-NewNode::NewNode(CarType* key,NewNode *father):key(key),left(NULL),right(NULL),father(father),height(1){}
+NewNode::NewNode(CarType* key):key(key),left(NULL),right(NULL),height(1){}
 
 // Calculate height
 int height(NewNode* N) {
@@ -25,8 +24,8 @@ int height(NewNode* N) {
 }
 
 // New Node creation
-NewNode* newNewNode(CarType* key,NewNode *father) {
-  NewNode *node = new NewNode(key,father);
+NewNode* newNewNode(CarType* key) {
+  NewNode *node = new NewNode(key);
   return (node);
 }
 
@@ -36,9 +35,6 @@ NewNode* rightRotate(NewNode* n) {
   NewNode* temp_right = temp_left->right;
   temp_left->right = n;
   n->left = temp_right;
-  temp_left->father=n->father;
-  n->father=temp_left;
-  temp_right->father=n;
   n->height = max_int(height(n->left),height(n->right)) + 1;
   temp_left->height = max_int(height(temp_left->left),height(temp_left->right)) + 1;
   return temp_left;
@@ -50,9 +46,6 @@ NewNode* leftRotate(NewNode* x) {
   NewNode* temp_right = temp_left->left;
   temp_left->left = x;
   x->right = temp_right;
-  temp_left->father=x->father;
-  x->father=temp_left;
-  temp_right->father=x;
   x->height = max_int(height(x->left),height(x->right)) + 1;
   temp_left->height = max_int(height(temp_left->left),height(temp_left->right)) + 1;
   return temp_left;
@@ -67,14 +60,14 @@ int getBalanceFactor(NewNode* N) {
 }
 
 // Insert a Node
-NewNode* insertNewNode(NewNode* node, CarType* key, NewNode *father=NULL) {
+NewNode* insertNewNode(NewNode* node, CarType* key) {
   // Find the correct postion and insert the Node
   if (node == NULL)
-    return (newNewNode(key,father));
+    return (newNewNode(key));
   if (node->key> key)
-    node->left = insertNewNode(node->left, key, node);
+    node->left = insertNewNode(node->left, key);
   else if (key > node->key)
-    node->right = insertNewNode(node->right, key, node);
+    node->right = insertNewNode(node->right, key);
   else
     return node;
 
@@ -83,17 +76,19 @@ NewNode* insertNewNode(NewNode* node, CarType* key, NewNode *father=NULL) {
   node->height = 1 + max_int(height(node->left),height(node->right));
   int balanceFactor = getBalanceFactor(node);
   if (balanceFactor > 1) {
-    if (node->left->key> key) {
+    if (getBalanceFactor(node->left) >= 0) {
       return rightRotate(node);
-    } else if (key > node->left->key) {
+    }
+    else if (getBalanceFactor(node->left) == -1) {
       node->left = leftRotate(node->left);
       return rightRotate(node);
     }
   }
   if (balanceFactor < -1) {
-    if (key > node->right->key) {
+    if (getBalanceFactor(node->right)<=0) {
       return leftRotate(node);
-    } else if (node->right->key > key) {
+    }
+    else if (getBalanceFactor(node->right)==1) {
       node->right = rightRotate(node->right);
       return leftRotate(node);
     }
@@ -151,8 +146,7 @@ NewNode* deleteNewNode(NewNode* root, CarType* key) {
     else {
       NewNode *temp = NewNodeWithMimumValue(root->right);
       root->key = temp->key;
-      root->right = deleteNewNode(root->right,
-                   temp->key);
+      root->right = deleteNewNode(root->right,temp->key);
     }
   }
 
@@ -166,7 +160,8 @@ NewNode* deleteNewNode(NewNode* root, CarType* key) {
   if (balanceFactor > 1) {
     if (getBalanceFactor(root->left) >= 0) {
       return rightRotate(root);
-    } else {
+    }
+    else if (getBalanceFactor(root->left) == -1) {
       root->left = leftRotate(root->left);
       return rightRotate(root);
     }
@@ -174,7 +169,8 @@ NewNode* deleteNewNode(NewNode* root, CarType* key) {
   if (balanceFactor < -1) {
     if (getBalanceFactor(root->right) <= 0) {
       return leftRotate(root);
-    } else {
+    }
+    else if (getBalanceFactor(root->right) == 1) {
       root->right = rightRotate(root->right);
       return leftRotate(root);
     }

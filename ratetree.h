@@ -9,13 +9,12 @@ class RateNode{
   CarModel* key;
   RateNode*left;
   RateNode*right;
-  RateNode *father;
   int height;
-  RateNode(CarModel* key,RateNode *father);
+  RateNode(CarModel* key);
   ~RateNode()=default;
 };
 
-RateNode::RateNode(CarModel* key,RateNode *father):key(key),left(NULL),right(NULL),father(father),height(1){}
+RateNode::RateNode(CarModel* key):key(key),left(NULL),right(NULL),height(1){}
 
 // Calculate height
 int height(RateNode*N) {
@@ -25,8 +24,8 @@ int height(RateNode*N) {
 }
 
 // New RateNodecreation
-RateNode* newRateNode(CarModel* key,RateNode *father) {
-  RateNode* node= new RateNode(key,father);
+RateNode* newRateNode(CarModel* key) {
+  RateNode* node= new RateNode(key);
   return (node);
 }
 
@@ -36,9 +35,6 @@ RateNode* rightRotate(RateNode* n) {
   RateNode* temp_right = temp_left->right;
   temp_left->right = n;
   n->left = temp_right;
-  temp_left->father=n->father;
-  n->father=temp_left;
-  temp_right->father=n;
   n->height = max_int(height(n->left),height(n->right)) + 1;
   temp_left->height = max_int(height(temp_left->left),height(temp_left->right)) + 1;
   return temp_left;
@@ -50,9 +46,6 @@ RateNode* leftRotate(RateNode* x) {
   RateNode* temp_right = temp_left->left;
   temp_left->left = x;
   x->right = temp_right;
-  temp_left->father=x->father;
-  x->father=temp_left;
-  temp_right->father=x;
   x->height = max_int(height(x->left),height(x->right)) + 1;
   temp_left->height = max_int(height(temp_left->left),height(temp_left->right)) + 1;
   return temp_left;
@@ -99,35 +92,33 @@ RateNode* findRateNodeByRate(RateNode* node, int rate, int modelid, int type_id)
 
 
 // Insert a node
-RateNode* insertRateNode(RateNode* node, CarModel* key,RateNode *father=NULL) {
+RateNode* insertRateNode(RateNode* node, CarModel* key) {
   // Find the correct postion and insert the node
   if (node== NULL)
-    return (newRateNode(key,father));
+    return (newRateNode(key));
   if (*(node->key)> *(key))
-    node->left = insertRateNode(node->left, key, node);
+    node->left = insertRateNode(node->left, key);
   else if (*(key) > *(node->key))
-    node->right = insertRateNode(node->right, key, node);
-  else
-    return node;
+    node->right = insertRateNode(node->right, key);
 
   // Update the balance factor of each RateNodeand
   // balance the tree
   node->height = 1 + max_int(height(node->left),height(node->right));
   int balanceFactor = getBalanceFactor(node);
   if (balanceFactor > 1) {
-    if (*(node->left->key) > *(key)) {
+    if (getBalanceFactor(node->left) >= 0) {
       return rightRotate(node);
     }
-    else if (*(key) > *(node->left->key)) {
+    else if (getBalanceFactor(node->left) == -1) {
       node->left = leftRotate(node->left);
       return rightRotate(node);
     }
   }
   if (balanceFactor < -1) {
-    if (*(key) > *(node->right->key)) {
+    if (getBalanceFactor(node->right) <=0) {
       return leftRotate(node);
     }
-    else if (*(node->right->key) > *(key)) {
+    else if (getBalanceFactor(node->right) ==1) {
       node->right = rightRotate(node->right);
       return leftRotate(node);
     }
@@ -186,7 +177,7 @@ RateNode* deleteRateNode(RateNode* root, CarModel* key) {
     if (getBalanceFactor(root->left) >= 0) {
       return rightRotate(root);
     }
-    else {
+    else if (getBalanceFactor(root->left) == -1){
       root->left = leftRotate(root->left);
       return rightRotate(root);
     }
@@ -195,7 +186,7 @@ RateNode* deleteRateNode(RateNode* root, CarModel* key) {
     if (getBalanceFactor(root->right) <= 0) {
       return leftRotate(root);
     }
-    else {
+    else if (getBalanceFactor(root->right) == 1) {
       root->right = rightRotate(root->right);
       return leftRotate(root);
     }

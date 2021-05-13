@@ -71,8 +71,6 @@ SalesNode* findSalesNode(SalesNode *node, CarModel* key){
   {
     return (findSalesNode(node->right, key));
   }
-  else
-    return node;
 }
 
 // Insert a node
@@ -95,19 +93,19 @@ SalesNode* insertSalesNode(SalesNode* node, CarModel* key) {
   node->height = 1 + max_int(height(node->left),height(node->right));
   int balanceFactor = getBalanceFactor(node);
   if (balanceFactor > 1) {
-    if (node->left->key> key) {
+    if (getBalanceFactor(node->left) >=0) {
       return rightRotate(node);
     }
-    else if (key > node->left->key) {
+    else if (getBalanceFactor(node->left) ==-1) {
       node->left = leftRotate(node->left);
       return rightRotate(node);
     }
   }
   if (balanceFactor < -1) {
-    if (*(key) > *(node->right->key)) {
+    if (getBalanceFactor(node->right)<=0) {
       return leftRotate(node);
     }
-    else if (*(node->right->key) > *(key)) {
+    else if (getBalanceFactor(node->right) ==1) {
       node->right = rightRotate(node->right);
       return leftRotate(node);
     }
@@ -202,7 +200,7 @@ SalesNode* deleteSalesNode(SalesNode*root, CarModel* key) {
     if (getBalanceFactor(root->left) >= 0) {
       return rightRotate(root);
     }
-    else {
+    else if(getBalanceFactor(root->left) == -1) {
       root->left = leftRotate(root->left);
       return rightRotate(root);
     }
@@ -211,7 +209,7 @@ SalesNode* deleteSalesNode(SalesNode*root, CarModel* key) {
     if (getBalanceFactor(root->right) <= 0) {
       return leftRotate(root);
     }
-    else {
+    else if (getBalanceFactor(root->right) == 1){
       root->right = rightRotate(root->right);
       return leftRotate(root);
     }
