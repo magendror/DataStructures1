@@ -90,12 +90,12 @@ StatusType MakeComplaint(void *DS, int typeID, int modelID, int t){
     int newrate=100/t;
     int rate=type_node->key->statistics[0][modelID];
     RateNode* model_node=findRateNodeByRate(DS_convert->rate_tree,rate,modelID,typeID);
-    //CarModel* temp = model_node->key;
+    CarModel* temp = model_node->key;
     DS_convert->rate_tree = deleteRateNode(DS_convert->rate_tree,model_node->key);
-    model_node->key->rate=model_node->key->rate-newrate;
+    temp->rate=rate-newrate;
     type_node->key->statistics[0][modelID]-=newrate;
-    DS_convert->rate_tree=insertRateNode(DS_convert->rate_tree,model_node->key);
-    updatePointers(DS_convert);
+    DS_convert->rate_tree=insertRateNode(DS_convert->rate_tree,temp);
+    //updatePointers(DS_convert);
     return SUCCESS;
 }
 

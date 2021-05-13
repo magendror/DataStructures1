@@ -127,7 +127,10 @@ SalesNode* SalesNodeWithMimumValue(SalesNode*node) {
 
 SalesNode* SalesNodeWithMaxValue(SalesNode*node) {
   SalesNode*current = node;
-  while (current != NULL){
+  if(current==NULL){
+    return NULL;
+  }
+  while (current->right != NULL){
     current = current->right;
   }
   return current;

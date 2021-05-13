@@ -99,7 +99,10 @@ NewNode* insertNewNode(NewNode* node, CarType* key) {
 // Node with minimum value
 NewNode* NewNodeWithMimumValue(NewNode* node) {
   NewNode *current = node;
-  while (current != NULL){
+  if(current==NULL){
+    return current;
+  }
+  while (current->left != NULL){
     current = current->left;
   }
   return current;
