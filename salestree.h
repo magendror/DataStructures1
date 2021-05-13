@@ -71,6 +71,9 @@ SalesNode* findSalesNode(SalesNode *node, CarModel* key){
   {
     return (findSalesNode(node->right, key));
   }
+  else{
+    return node;
+  }
 }
 
 // Insert a node
