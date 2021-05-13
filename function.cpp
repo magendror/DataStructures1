@@ -417,6 +417,7 @@ void Quit(void **DS){
     clearTypeNode(DS_convert->type_tree);
     clearRateNode(DS_convert->rate_tree);
     delete DS_convert;
+    DS=NULL;
 }
 
 
