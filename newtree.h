@@ -64,12 +64,15 @@ NewNode* insertNewNode(NewNode* node, CarType* key) {
   // Find the correct postion and insert the Node
   if (node == NULL)
     return (newNewNode(key));
-  if (node->key> key)
+  if (*(node->key)> *(key)){
     node->left = insertNewNode(node->left, key);
-  else if (key > node->key)
+  }
+  else if (*(key) > *(node->key)){
     node->right = insertNewNode(node->right, key);
-  else
+  }
+  else {
     return node;
+  }
 
   // Update the balance factor of each Node and
   // balance the tree
@@ -126,16 +129,17 @@ NewNode *findNewNode(NewNode *node, int type_id){
 
 // Delete a Node
 
-///////Need to move also list, not just key!!!!////
-
 NewNode* deleteNewNode(NewNode* root, CarType* key) {
   // Find the Node and delete it
-  if (root == NULL)
+  if (root == NULL){
     return root;
-  if (root->key > key)
+  }
+  if (root->key > key){
     root->left = deleteNewNode(root->left, key);
-  else if (key > root->key)
+  }
+  else if (key > root->key){
     root->right = deleteNewNode(root->right, key);
+  }
   else {
     if ((root->left == NULL) ||
       (root->right == NULL)) {
