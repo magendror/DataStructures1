@@ -13,10 +13,10 @@ public:
     NewNode* new_tree;
     RateNode* rate_tree;
     SalesNode* sales_tree;
-    RateNode* WorstRate;
+    /*RateNode* WorstRate;
     NewNode* WorstRateNew;
     RateNode* WorstSecondRate;
-    NewNode* WorstSecondRateNew;
+    NewNode* WorstSecondRateNew;*/
     int NumOfModels;
     int NumOfNewModels;
     SalesNode* MaxSales;
@@ -24,8 +24,8 @@ public:
     ~Dealership();
 };
 
-Dealership::Dealership() : type_tree(NULL), new_tree(NULL), rate_tree(NULL), sales_tree(NULL), WorstRate(NULL),
-                           WorstRateNew(NULL), WorstSecondRate(NULL), WorstSecondRateNew(NULL), NumOfModels(0),
+Dealership::Dealership() : type_tree(NULL), new_tree(NULL), rate_tree(NULL), sales_tree(NULL),/* WorstRate(NULL),
+                           WorstRateNew(NULL), WorstSecondRate(NULL), WorstSecondRateNew(NULL), */NumOfModels(0),
                            NumOfNewModels(0), MaxSales(NULL)
 {
 }

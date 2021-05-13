@@ -18,15 +18,6 @@ void* Init(){
 
 void updatePointers(Dealership* DS){
     DS->MaxSales=SalesNodeWithMaxValue(DS->sales_tree);
-    //DS->WorstRate=RateNodeWithMimumValue(DS->rate_tree);
-    //DS->WorstRateNew=NewNodeWithMimumValue(DS->new_tree);
-    //DS->WorstSecondRate=RateNodeWithMimumValue(DS->rate_tree->right);
-    //DS->WorstSecondRateNew=NewNodeWithMimumValue(DS->new_tree->right);
-}
-
-void updatePointersMinimalistic(Dealership* DS){
-    DS->WorstRateNew=NewNodeWithMimumValue(DS->new_tree);
-    DS->WorstSecondRateNew=NewNodeWithMimumValue(DS->new_tree->right);
 }
 
 StatusType RemoveCarType(void *DS, int typeID){
@@ -95,7 +86,6 @@ StatusType MakeComplaint(void *DS, int typeID, int modelID, int t){
     temp->rate=rate-newrate;
     type_node->key->statistics[0][modelID]-=newrate;
     DS_convert->rate_tree=insertRateNode(DS_convert->rate_tree,temp);
-    //updatePointers(DS_convert);
     return SUCCESS;
 }
 
@@ -240,9 +230,6 @@ StatusType AddCarType(void *DS, int typeID, int numOfModels){
         if (i==0){
             in_new_tree->newlist=model;
         }
-        else if(i==numOfModels-1){
-            in_type_tree->key->pointers[i]->previous=in_type_tree->key->pointers[i-1];   
-        }
         else{
             in_type_tree->key->pointers[i]->previous=in_type_tree->key->pointers[i-1];
             in_type_tree->key->pointers[i-1]->next=in_type_tree->key->pointers[i];
@@ -250,7 +237,6 @@ StatusType AddCarType(void *DS, int typeID, int numOfModels){
     }
     DS_convert->NumOfModels+=numOfModels;
     DS_convert->NumOfNewModels+=numOfModels;
-    //updatePointersMinimalistic(DS_convert);
     return SUCCESS;
 }
 
