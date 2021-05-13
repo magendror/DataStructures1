@@ -119,7 +119,7 @@ SalesNode* insertSalesNode(SalesNode* node, CarModel* key) {
 // SalesNodewith minimum value
 SalesNode* SalesNodeWithMimumValue(SalesNode*node) {
   SalesNode*current = node;
-  while (current->left != NULL){
+  while (current != NULL){
     current = current->left;
   }
   return current;
@@ -127,7 +127,7 @@ SalesNode* SalesNodeWithMimumValue(SalesNode*node) {
 
 SalesNode* SalesNodeWithMaxValue(SalesNode*node) {
   SalesNode*current = node;
-  while (current->right != NULL){
+  while (current != NULL){
     current = current->right;
   }
   return current;

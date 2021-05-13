@@ -129,7 +129,7 @@ RateNode* insertRateNode(RateNode* node, CarModel* key) {
 // RateNodewith minimum value
 RateNode* RateNodeWithMimumValue(RateNode* node) {
   RateNode*current = node;
-  while (current->left != NULL){
+  while (current != NULL){
     current = current->left;
   }
   return current;

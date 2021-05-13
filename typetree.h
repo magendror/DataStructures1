@@ -119,7 +119,7 @@ TypeNode* insertTypeNode(TypeNode* node, CarType* key) {
 // TypeNode with minimum value
 TypeNode* TypeNodeWithMimumValue(TypeNode* node) {
   TypeNode *current = node;
-  while (current->left != NULL){
+  while (current != NULL){
     current = current->left;
   }
   return current;
