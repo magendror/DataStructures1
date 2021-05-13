@@ -150,17 +150,17 @@ SalesNode *findSalesNodeBySales(SalesNode *node, int sales, int modelid, int typ
   }
   else{
     if(node->key->type_id > type_id){
-      return (findSalesNodeBySales(node->left, sales,modelid, type_id));
+      return (findSalesNodeBySales(node->right, sales,modelid, type_id));
     }
     else if (node->key->type_id < type_id){
-      return (findSalesNodeBySales(node->right, sales,modelid, type_id));
+      return (findSalesNodeBySales(node->left, sales,modelid, type_id));
     }
     else{
       if(node->key->model_id > modelid){
-        return (findSalesNodeBySales(node->left, sales,modelid, type_id));
+        return (findSalesNodeBySales(node->right, sales,modelid, type_id));
       }
       else if(node->key->model_id < modelid){
-        return (findSalesNodeBySales(node->right, sales,modelid, type_id));
+        return (findSalesNodeBySales(node->left, sales,modelid, type_id));
       }
       else
         return node;
