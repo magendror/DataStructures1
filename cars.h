@@ -155,7 +155,6 @@ CarType::~CarType()
 }
 bool CarType::operator>(CarType &type2)
 {
-    assert(type_id == type2.type_id);
     if (type_id > type2.type_id)
     {
         return true;
