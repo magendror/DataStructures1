@@ -16,20 +16,17 @@ class NewNode {
 
 NewNode::NewNode(CarType* key):key(key),left(NULL),right(NULL),height(1){}
 
-// Calculate height
 int height(NewNode* N) {
   if (N == NULL)
     return 0;
   return N->height;
 }
 
-// New Node creation
 NewNode* newNewNode(CarType* key) {
   NewNode *node = new NewNode(key);
   return (node);
 }
 
-// Rotate right
 NewNode* rightRotate(NewNode* n) {
   NewNode* temp_left = n->left;
   NewNode* temp_right = temp_left->right;
@@ -40,7 +37,6 @@ NewNode* rightRotate(NewNode* n) {
   return temp_left;
 }
 
-// Rotate left
 NewNode* leftRotate(NewNode* x) {
   NewNode* temp_left = x->right;
   NewNode* temp_right = temp_left->left;
@@ -51,7 +47,6 @@ NewNode* leftRotate(NewNode* x) {
   return temp_left;
 }
 
-// Get the balance factor of each Node
 int getBalanceFactor(NewNode* N) {
   if (N == NULL)
     return 0;
@@ -59,9 +54,8 @@ int getBalanceFactor(NewNode* N) {
        height(N->right);
 }
 
-// Insert a Node
 NewNode* insertNewNode(NewNode* node, CarType* key) {
-  // Find the correct postion and insert the Node
+  //find position and insert recursively
   if (node == NULL)
     return (newNewNode(key));
   if (*(node->key)> *(key)){
@@ -73,10 +67,8 @@ NewNode* insertNewNode(NewNode* node, CarType* key) {
   else {
     return node;
   }
-
-  // Update the balance factor of each Node and
   // balance the tree
-  node->height = 1 + max_int(height(node->left),height(node->right));
+  node->height = max_int(height(node->left),height(node->right)) + 1;
   int balanceFactor = getBalanceFactor(node);
   if (balanceFactor > 1) {
     if (getBalanceFactor(node->left) >= 0) {
@@ -99,7 +91,6 @@ NewNode* insertNewNode(NewNode* node, CarType* key) {
   return node;
 }
 
-// Node with minimum value
 NewNode* NewNodeWithMimumValue(NewNode* node) {
   NewNode *current = node;
   if(current==NULL){
@@ -127,10 +118,7 @@ NewNode *findNewNode(NewNode *node, int type_id){
     return node;
 }
 
-// Delete a Node
-
 NewNode* deleteNewNode(NewNode* root, CarType* key) {
-  // Find the Node and delete it
   if (root == NULL){
     return root;
   }
@@ -161,9 +149,8 @@ NewNode* deleteNewNode(NewNode* root, CarType* key) {
   if (root == NULL)
     return root;
 
-  // Update the balance factor of each Node and
   // balance the tree
-  root->height = 1 + max_int(height(root->left),height(root->right));
+  root->height = max_int(height(root->left),height(root->right)) + 1;
   int balanceFactor = getBalanceFactor(root);
   if (balanceFactor > 1) {
     if (getBalanceFactor(root->left) >= 0) {

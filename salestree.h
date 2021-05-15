@@ -16,7 +16,6 @@ class SalesNode{
 
 SalesNode::SalesNode(CarModel* key):key(key),left(NULL),right(NULL),height(1){}
 
-// Calculate height
 int height(SalesNode* N) {
   if (N == NULL){
     return 0;
@@ -24,13 +23,11 @@ int height(SalesNode* N) {
   return N->height;
 }
 
-// New SalesNodecreation
 SalesNode* newSalesNode(CarModel* key) {
   SalesNode* node= new SalesNode(key);
   return (node);
 }
 
-// Rotate right
 SalesNode* rightRotate(SalesNode* n) {
   SalesNode* temp_left = n->left;
   SalesNode* temp_right = temp_left->right;
@@ -41,7 +38,6 @@ SalesNode* rightRotate(SalesNode* n) {
   return temp_left;
 }
 
-// Rotate left
 SalesNode* leftRotate(SalesNode* x) {
   SalesNode* temp_left = x->right;
   SalesNode* temp_right = temp_left->left;
@@ -52,7 +48,6 @@ SalesNode* leftRotate(SalesNode* x) {
   return temp_left;
 }
 
-// Get the balance factor of each node
 int getBalanceFactor(SalesNode* N) {
   if (N == NULL){
     return 0;
@@ -76,9 +71,8 @@ SalesNode* findSalesNode(SalesNode *node, CarModel* key){
   }
 }
 
-// Insert a node
 SalesNode* insertSalesNode(SalesNode* node, CarModel* key) {
-  // Find the correct postion and insert the node
+  //find position and insert recursively
   if (node== NULL){
     return (newSalesNode(key));
   }
@@ -91,9 +85,8 @@ SalesNode* insertSalesNode(SalesNode* node, CarModel* key) {
   else{
     return node;
   }
-  // Update the balance factor of each SalesNodeand
   // balance the tree
-  node->height = 1 + max_int(height(node->left),height(node->right));
+  node->height = max_int(height(node->left),height(node->right)) + 1;
   int balanceFactor = getBalanceFactor(node);
   if (balanceFactor > 1) {
     if (getBalanceFactor(node->left) >=0) {
@@ -116,7 +109,6 @@ SalesNode* insertSalesNode(SalesNode* node, CarModel* key) {
   return node;
 }
 
-// SalesNodewith minimum value
 SalesNode* SalesNodeWithMimumValue(SalesNode*node) {
   SalesNode*current = node;
   while (current != NULL){
@@ -136,7 +128,7 @@ SalesNode* SalesNodeWithMaxValue(SalesNode*node) {
   return current;
 }
 
-////Find the correct postion by sales and id
+//find RateNode using sales as int input
 SalesNode *findSalesNodeBySales(SalesNode *node, int sales, int modelid, int type_id){
   if(node==NULL){
     return node;
@@ -168,10 +160,7 @@ SalesNode *findSalesNodeBySales(SalesNode *node, int sales, int modelid, int typ
   }
 }
 
-
-// Delete a node
 SalesNode* deleteSalesNode(SalesNode*root, CarModel* key) {
-  // Find the SalesNodeand delete it
   if (root == NULL)
     return root;
   if (*(root->key) > *(key))
@@ -200,7 +189,7 @@ SalesNode* deleteSalesNode(SalesNode*root, CarModel* key) {
     return root;
   // Update the balance factor of each SalesNodeand
   // balance the tree
-  root->height = 1 + max_int(height(root->left),height(root->right));
+  root->height = max_int(height(root->left),height(root->right)) + 1;
   int balanceFactor = getBalanceFactor(root);
   if (balanceFactor > 1) {
     if (getBalanceFactor(root->left) >= 0) {
