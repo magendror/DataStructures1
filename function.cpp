@@ -75,7 +75,7 @@ StatusType MakeComplaint(void *DS, int typeID, int modelID, int t){
     if(type_node==NULL){
         return FAILURE;
     }
-    if(type_node->key->num_of_models<modelID){
+    if(type_node->key->num_of_models<=modelID){
         return FAILURE;
     }
     int newrate=100/t;
@@ -285,7 +285,7 @@ StatusType SellCar(void *DS, int typeID, int modelID){
     if (in_type_tree==NULL){
         return FAILURE;
     }
-    if (in_type_tree->key->num_of_models<modelID){
+    if (in_type_tree->key->num_of_models<=modelID){
         return INVALID_INPUT;    
     }
     CarModel* rate = new CarModel(modelID,true,typeID);
