@@ -48,10 +48,10 @@ NewNode* leftRotate(NewNode* x) {
 }
 
 int getBalanceFactor(NewNode* N) {
-  if (N == NULL)
+  if (N == NULL){
     return 0;
-  return height(N->left) -
-       height(N->right);
+  }
+  return height(N->left) -height(N->right);
 }
 
 NewNode* insertNewNode(NewNode* node, CarType* key) {
@@ -122,21 +122,22 @@ NewNode* deleteNewNode(NewNode* root, CarType* key) {
   if (root == NULL){
     return root;
   }
-  if (root->key > key){
+  if (*(root->key) > *(key)){
     root->left = deleteNewNode(root->left, key);
   }
-  else if (key > root->key){
+  else if (*(key) > *(root->key)){
     root->right = deleteNewNode(root->right, key);
   }
   else {
-    if ((root->left == NULL) ||
-      (root->right == NULL)) {
+    if ((root->left == NULL) || (root->right == NULL)) {
       NewNode *temp = root->left ? root->left : root->right;
       if (temp == NULL) {
         temp = root;
         root = NULL;
-      } else
+      }
+      else{
         *root = *temp;
+      }
       delete temp;
     }
     else {
@@ -145,10 +146,8 @@ NewNode* deleteNewNode(NewNode* root, CarType* key) {
       root->right = deleteNewNode(root->right,temp->key);
     }
   }
-
   if (root == NULL)
     return root;
-
   // balance the tree
   root->height = max_int(height(root->left),height(root->right)) + 1;
   int balanceFactor = getBalanceFactor(root);

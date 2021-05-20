@@ -110,15 +110,18 @@ SalesNode* insertSalesNode(SalesNode* node, CarModel* key) {
 }
 
 SalesNode* SalesNodeWithMimumValue(SalesNode*node) {
-  SalesNode*current = node;
-  while (current != NULL){
+  SalesNode* current = node;
+  if(current==NULL){
+    return NULL;
+  }
+  while (current->left != NULL){
     current = current->left;
   }
   return current;
 }
 
 SalesNode* SalesNodeWithMaxValue(SalesNode*node) {
-  SalesNode*current = node;
+  SalesNode* current = node;
   if(current==NULL){
     return NULL;
   }
@@ -187,7 +190,6 @@ SalesNode* deleteSalesNode(SalesNode*root, CarModel* key) {
   }
   if (root == NULL)
     return root;
-  // Update the balance factor of each SalesNodeand
   // balance the tree
   root->height = max_int(height(root->left),height(root->right)) + 1;
   int balanceFactor = getBalanceFactor(root);

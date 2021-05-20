@@ -88,12 +88,15 @@ RateNode* findRateNodeByRate(RateNode* node, int rate, int modelid, int type_id)
 
 RateNode* insertRateNode(RateNode* node, CarModel* key) {
   //find position and insert recursively
-  if (node== NULL)
+  if (node== NULL){
     return (newRateNode(key));
-  if (*(node->key)> *(key))
+  }
+  if (*(node->key)> *(key)){
     node->left = insertRateNode(node->left, key);
-  else if (*(key) > *(node->key))
+  }
+  else if (*(key) > *(node->key)){
     node->right = insertRateNode(node->right, key);
+  }
   // balance the tree
   node->height = max_int(height(node->left),height(node->right)) + 1;
   int balanceFactor = getBalanceFactor(node);

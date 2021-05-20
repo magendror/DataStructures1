@@ -53,10 +53,13 @@ StatusType RemoveCarType(void *DS, int typeID){
                 (DS_convert->NumOfNewModels)--;
         } 
     }
+    CarType* temp_type=NULL;
     NewNode *new_node=findNewNode(DS_convert->new_tree,typeID);
-    CarType* temp_type = new_node->key;
-    DS_convert->new_tree = deleteNewNode(DS_convert->new_tree,temp_type);
-    delete temp_type;
+    if(new_node!=NULL){
+        temp_type = new_node->key;
+        DS_convert->new_tree = deleteNewNode(DS_convert->new_tree,temp_type);
+        delete temp_type;
+    }
     //delete from new tree
     temp_type = type_node->key;
     DS_convert->type_tree=deleteTypeNode(DS_convert->type_tree,temp_type);
