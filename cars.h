@@ -114,8 +114,7 @@ CarModelList::CarModelList(int model_id, bool sort_by_rate, int type_id, int num
                                     CarModel(model_id,sort_by_rate,type_id,num_of_sales,rate),next(NULL),previous(NULL)
 {}
 
-class CarType
-{
+class CarType{
 public:
     int type_id;
     int num_of_models;
@@ -153,6 +152,7 @@ CarType::~CarType()
     delete[] statistics[1];
     delete[] statistics;
 }
+
 bool CarType::operator>(CarType &type2)
 {
     if (type_id > type2.type_id)
@@ -165,8 +165,21 @@ bool CarType::operator>(CarType &type2)
     }
 }
 
+class NewCarType : public CarType{
+    public:
+        CarModelList* new_list;
+        NewCarType(int type_id, int num_of_models=0,int best_seller=0, int best_seller_sales=0);
+        ~NewCarType()=default;
+};
+
+NewCarType::NewCarType(int type_id, int num_of_models,int best_seller, int best_seller_sales) :
+                CarType(type_id,num_of_models,best_seller,best_seller_sales),new_list(NULL){}
+                                                  
+
+
 int max_int(int a, int b) {
   return (a > b) ? a : b;
 }
+
 
 #endif

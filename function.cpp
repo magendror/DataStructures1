@@ -53,15 +53,14 @@ StatusType RemoveCarType(void *DS, int typeID){
                 (DS_convert->NumOfNewModels)--;
         } 
     }
-    CarType* temp_type=NULL;
     NewNode *new_node=findNewNode(DS_convert->new_tree,typeID);
     if(new_node!=NULL){
-        temp_type = new_node->key;
+        NewCarType* temp_type = new_node->key;
         DS_convert->new_tree = deleteNewNode(DS_convert->new_tree,temp_type);
         delete temp_type;
     }
     //delete from new tree
-    temp_type = type_node->key;
+    CarType* temp_type = type_node->key;
     DS_convert->type_tree=deleteTypeNode(DS_convert->type_tree,temp_type);
     (DS_convert->NumOfModels)-=temp_type->num_of_models;
     delete temp_type;
@@ -112,7 +111,7 @@ static void newInorder(NewNode* new_tree,int *types, int *models,int len,int* in
     }
     newInorder(new_tree->left,types,models,len,index);
     if(*index<len){
-        CarModelList* current = new_tree->newlist;
+        CarModelList* current = new_tree->key->new_list;
         while(*index<len && current!=NULL){
             types[*index]=new_tree->key->type_id;
             models[*index]=current->model_id;
@@ -227,7 +226,7 @@ StatusType AddCarType(void *DS, int typeID, int numOfModels){
         return FAILURE;
     }
     CarType* type = new CarType(typeID,numOfModels);
-    CarType* new_type = new CarType(typeID,numOfModels);
+    NewCarType* new_type = new NewCarType(typeID,numOfModels);
     DS_convert->type_tree = insertTypeNode(DS_convert->type_tree,type);
     DS_convert->new_tree = insertNewNode(DS_convert->new_tree,new_type);
     NewNode* in_new_tree = findNewNode(DS_convert->new_tree,typeID);
@@ -236,7 +235,7 @@ StatusType AddCarType(void *DS, int typeID, int numOfModels){
         CarModelList* model = new CarModelList(i,true,typeID);
         in_type_tree->key->pointers[i]=model;
         if (i==0){
-            in_new_tree->newlist=model;
+            in_new_tree->key->new_list=model;
         }
         else{
             in_type_tree->key->pointers[i]->previous=in_type_tree->key->pointers[i-1];
@@ -253,16 +252,16 @@ void SellCarForFirstTime(void *DS, int typeID, int modelID){
     NewNode* in_new_tree = findNewNode(DS_convert->new_tree,typeID);
     TypeNode* in_type_tree = findTypeNode(DS_convert->type_tree,typeID);
     //if first in list
-    if(in_new_tree->newlist->model_id==modelID){
-        in_new_tree->newlist=in_type_tree->key->pointers[modelID]->next;
+    if(in_new_tree->key->new_list->model_id==modelID){
+        in_new_tree->key->new_list=in_type_tree->key->pointers[modelID]->next;
         if(((in_type_tree->key->pointers[modelID])->next)!=NULL){
             ((in_type_tree->key->pointers[modelID])->next)->previous=NULL;
         }
         delete in_type_tree->key->pointers[modelID];
         in_type_tree->key->pointers[modelID]=NULL;
         //if also last in list - now list empty
-        if(in_new_tree->newlist==NULL){
-            CarType* temp = new CarType(typeID);
+        if(in_new_tree->key->new_list==NULL){
+            NewCarType* temp = new NewCarType(typeID);
             DS_convert->new_tree=deleteNewNode(DS_convert->new_tree,temp);
             delete temp;    
         }
@@ -395,10 +394,10 @@ void clearNewNode(NewNode* current){
     }
     clearNewNode(current->left);
     clearNewNode(current->right);
-    while(current->newlist!=NULL){
-        CarModelList* temp = current->newlist->next;
-        delete current->newlist;
-        current->newlist=temp;
+    while(current->key->new_list!=NULL){
+        CarModelList* temp = current->key->new_list->next;
+        delete current->key->new_list;
+        current->key->new_list=temp;
     }
     delete current->key;
     delete current;

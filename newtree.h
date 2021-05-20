@@ -5,16 +5,16 @@
 
 class NewNode {
   public:
-  CarType* key;
+  NewCarType* key;
   NewNode *left;
   NewNode *right;
   int height;
-  CarModelList* newlist;
-  NewNode(CarType* key);
+  //CarModelList* newlist;
+  NewNode(NewCarType* key);
   ~NewNode()=default;
 };
 
-NewNode::NewNode(CarType* key):key(key),left(NULL),right(NULL),height(1){}
+NewNode::NewNode(NewCarType* key):key(key),left(NULL),right(NULL),height(1){}
 
 int height(NewNode* N) {
   if (N == NULL)
@@ -22,7 +22,7 @@ int height(NewNode* N) {
   return N->height;
 }
 
-NewNode* newNewNode(CarType* key) {
+NewNode* newNewNode(NewCarType* key) {
   NewNode *node = new NewNode(key);
   return (node);
 }
@@ -54,7 +54,7 @@ int getBalanceFactor(NewNode* N) {
   return height(N->left) -height(N->right);
 }
 
-NewNode* insertNewNode(NewNode* node, CarType* key) {
+NewNode* insertNewNode(NewNode* node, NewCarType* key) {
   //find position and insert recursively
   if (node == NULL)
     return (newNewNode(key));
@@ -118,7 +118,7 @@ NewNode *findNewNode(NewNode *node, int type_id){
     return node;
 }
 
-NewNode* deleteNewNode(NewNode* root, CarType* key) {
+NewNode* deleteNewNode(NewNode* root, NewCarType* key) {
   if (root == NULL){
     return root;
   }
