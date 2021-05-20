@@ -337,7 +337,7 @@ StatusType GetBestSellerModelByType(void *DS, int typeID, int *modelID){
     if(DS==NULL||typeID<0){
         return INVALID_INPUT;
     }
-    if(DS_convert->MaxSales==NULL&&DS_convert->NumOfModels>0){
+    if(DS_convert->MaxSales==NULL&&DS_convert->NumOfModels>0&&typeID==0){
         *modelID=0;
         return SUCCESS;
     }
