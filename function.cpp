@@ -218,7 +218,7 @@ StatusType GetWorstModels(void *DS, int numOfModels, int *types, int *models){
 
 StatusType AddCarType(void *DS, int typeID, int numOfModels){
     Dealership* DS_convert = (Dealership*)DS;
-    if(DS==NULL||typeID<=0||numOfModels<0){
+    if(DS==NULL||typeID<=0||numOfModels<=0){
         return INVALID_INPUT;
     }
     TypeNode* in_type_tree = findTypeNode(DS_convert->type_tree,typeID);
