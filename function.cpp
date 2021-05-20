@@ -288,7 +288,7 @@ StatusType SellCar(void *DS, int typeID, int modelID){
         return FAILURE;
     }
     if (in_type_tree->key->num_of_models<=modelID){
-        return INVALID_INPUT;    
+        return FAILURE;    
     }
     CarModel* rate = new CarModel(modelID,true,typeID);
     CarModel* sales = new CarModel(modelID,false,typeID);
