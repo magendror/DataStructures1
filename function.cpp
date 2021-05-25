@@ -261,9 +261,9 @@ void SellCarForFirstTime(void *DS, int typeID, int modelID){
         in_type_tree->key->pointers[modelID]=NULL;
         //if also last in list - now list empty
         if(in_new_tree->key->new_list==NULL){
-            NewCarType* temp = new NewCarType(typeID);
+            NewCarType* temp = in_new_tree->key;
             DS_convert->new_tree=deleteNewNode(DS_convert->new_tree,temp);
-            delete temp;    
+            delete temp;
         }
     }
     //if not first in list
